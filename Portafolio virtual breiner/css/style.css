@@ -3,14 +3,16 @@
    Modo Oscuro (default) + Modo Claro
    ============================================ */
 
-/* ========== RESET & BASE ========== */
-* {
+/* ========== RESET ========== */
+*,
+*::before,
+*::after {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
-/* ========== ROOT VARIABLES - DARK MODE (DEFAULT) ========== */
+/* ========== VARIABLES — DARK MODE (DEFAULT) ========== */
 :root,
 [data-theme="dark"] {
     --primary-color: #F65129;
@@ -50,19 +52,17 @@
     --shadow-lg: 0 10px 40px rgba(0, 0, 0, 0.5);
     --shadow-navbar: 0 4px 30px rgba(0, 0, 0, 0.5);
 
-    --overlay-hero: linear-gradient(
-        180deg,
-        rgba(0, 0, 0, 0.8) 0%,
-        rgba(0, 0, 0, 0.5) 40%,
-        rgba(0, 0, 0, 0.6) 70%,
-        rgba(0, 0, 0, 0.85) 100%
-    );
+    --overlay-hero: linear-gradient(180deg,
+            rgba(0, 0, 0, 0.8) 0%,
+            rgba(0, 0, 0, 0.5) 40%,
+            rgba(0, 0, 0, 0.6) 70%,
+            rgba(0, 0, 0, 0.85) 100%);
 
     --footer-bg: linear-gradient(135deg, #0d3b56, #13547a);
     --footer-text: rgba(255, 255, 255, 0.6);
     --footer-border: rgba(255, 255, 255, 0.1);
 
-    --toggler-icon: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba(248, 249, 250, 0.8)' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+    --toggler-icon: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba(248,249,250,0.8)' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
 
     --scrollbar-track: #1a1a1a;
     --scrollbar-thumb: #333;
@@ -109,19 +109,17 @@
     --shadow-lg: 0 10px 40px rgba(0, 0, 0, 0.1);
     --shadow-navbar: 0 4px 30px rgba(0, 0, 0, 0.08);
 
-    --overlay-hero: linear-gradient(
-        180deg,
-        rgba(0, 0, 0, 0.7) 0%,
-        rgba(0, 0, 0, 0.4) 40%,
-        rgba(0, 0, 0, 0.5) 70%,
-        rgba(0, 0, 0, 0.75) 100%
-    );
+    --overlay-hero: linear-gradient(180deg,
+            rgba(0, 0, 0, 0.7) 0%,
+            rgba(0, 0, 0, 0.4) 40%,
+            rgba(0, 0, 0, 0.5) 70%,
+            rgba(0, 0, 0, 0.75) 100%);
 
     --footer-bg: linear-gradient(135deg, #1a6fa0, #2196c4);
     --footer-text: rgba(255, 255, 255, 0.7);
     --footer-border: rgba(255, 255, 255, 0.15);
 
-    --toggler-icon: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba(26, 26, 46, 0.7)' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+    --toggler-icon: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba(26,26,46,0.7)' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
 
     --scrollbar-track: #f0f0f0;
     --scrollbar-thumb: #c0c0c0;
@@ -129,7 +127,7 @@
     color-scheme: light;
 }
 
-/* ========== GLOBAL TRANSITION FOR THEME CHANGE ========== */
+/* ========== THEME TRANSITION ========== */
 body,
 .navbar,
 .project-card,
@@ -147,10 +145,11 @@ body,
 .form-control,
 .scroll-top-btn,
 .site-footer {
-    transition: background-color 0.4s ease,
-                color 0.4s ease,
-                border-color 0.4s ease,
-                box-shadow 0.4s ease;
+    transition:
+        background-color 0.4s ease,
+        color 0.4s ease,
+        border-color 0.4s ease,
+        box-shadow 0.4s ease;
 }
 
 /* ========== BODY ========== */
@@ -181,14 +180,24 @@ body {
 }
 
 /* ========== TYPOGRAPHY ========== */
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
     color: var(--text-primary);
     font-weight: 700;
     line-height: 1.3;
 }
 
-h1 { font-size: clamp(2rem, 5vw, 3.5rem); }
-h2 { font-size: clamp(1.8rem, 4vw, 2.5rem); }
+h1 {
+    font-size: clamp(2rem, 5vw, 3.5rem);
+}
+
+h2 {
+    font-size: clamp(1.8rem, 4vw, 2.5rem);
+}
 
 p {
     color: var(--text-secondary);
@@ -205,7 +214,6 @@ a {
     color: var(--text-muted) !important;
 }
 
-/* ========== SELECTION ========== */
 ::selection {
     background-color: var(--primary-color);
     color: #fff;
@@ -293,7 +301,7 @@ a {
     }
 }
 
-/* Theme Toggle Button */
+/* Theme Toggle */
 .btn-theme-toggle {
     background: var(--bg-toggle);
     border: 1px solid var(--bg-toggle-border);
@@ -338,7 +346,7 @@ a {
     left: -100%;
     width: 100%;
     height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
     transition: left 0.5s ease;
 }
 
@@ -398,7 +406,6 @@ a {
     object-fit: cover;
 }
 
-/* Hero Content */
 .hero-subtitle {
     display: inline-block;
     background-color: var(--bg-hero-subtitle);
@@ -413,7 +420,6 @@ a {
     margin-bottom: 24px;
 }
 
-/* Hero text is always white (over video) */
 .hero-section h1 {
     font-size: clamp(2.2rem, 5vw, 3.8rem);
     font-weight: 700;
@@ -431,10 +437,15 @@ a {
     line-height: 1.6;
 }
 
-/* Hero Animations */
+/* ========== ANIMATIONS ========== */
 @keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
 }
 
 @keyframes slideUp {
@@ -442,17 +453,56 @@ a {
         opacity: 0;
         transform: translateY(40px);
     }
+
     to {
         opacity: 1;
         transform: translateY(0);
     }
 }
 
-.animate-fade-in { animation: fadeIn 1s ease-out; }
-.animate-slide-up { animation: slideUp 0.8s ease-out; }
-.animate-slide-up-delay { animation: slideUp 0.8s ease-out 0.2s backwards; }
-.animate-fade-in-delay { animation: fadeIn 0.8s ease-out 0.4s backwards; }
-.animate-fade-in-delay-2 { animation: fadeIn 0.8s ease-out 0.6s backwards; }
+@keyframes slideInRight {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes slideOutRight {
+    from {
+        transform: translateX(0);
+        opacity: 1;
+    }
+
+    to {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+}
+
+.animate-fade-in {
+    animation: fadeIn 1s ease-out;
+}
+
+.animate-slide-up {
+    animation: slideUp 0.8s ease-out;
+}
+
+.animate-slide-up-delay {
+    animation: slideUp 0.8s ease-out 0.2s backwards;
+}
+
+.animate-fade-in-delay {
+    animation: fadeIn 0.8s ease-out 0.4s backwards;
+}
+
+.animate-fade-in-delay-2 {
+    animation: fadeIn 0.8s ease-out 0.6s backwards;
+}
 
 /* ========== SOCIAL ICONS ========== */
 .social-icon {
@@ -484,7 +534,6 @@ a {
     color: #fff !important;
 }
 
-/* Social icons in non-hero sections adapt to theme */
 .site-footer .social-icon-link,
 .hero-section .social-icon-link {
     color: #fff !important;
@@ -495,7 +544,7 @@ a {
     color: var(--text-primary) !important;
 }
 
-/* ========== SECTION COMMON ========== */
+/* ========== SECTIONS COMMON ========== */
 .section-padding {
     padding: 100px 0;
 }
@@ -596,7 +645,101 @@ a {
     line-height: 1.3;
 }
 
-/* ========== EXPERIENCE / TIMELINE RESPONSIBILITIES ========== */
+/* ========== TIMELINE (Experience + Education) ========== */
+.education-timeline {
+    position: relative;
+    padding: 20px 0;
+}
+
+.education-timeline::before {
+    content: '';
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 2px;
+    height: 100%;
+    background: linear-gradient(180deg, var(--primary-color), rgba(246, 81, 41, 0.1));
+}
+
+.timeline-item {
+    position: relative;
+    margin-bottom: 50px;
+}
+
+.timeline-item:last-child {
+    margin-bottom: 0;
+}
+
+.timeline-marker {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 16px;
+    height: 16px;
+    background-color: var(--primary-color);
+    border: 3px solid var(--bg-primary);
+    border-radius: 50%;
+    z-index: 10;
+    box-shadow: 0 0 0 4px var(--primary-light);
+}
+
+.timeline-content {
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-color);
+    padding: 28px;
+    border-radius: 12px;
+    box-shadow: var(--shadow-sm);
+    width: 44%;
+}
+
+.timeline-content:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-md);
+    border-color: var(--primary-border);
+}
+
+.timeline-item:nth-child(odd) .timeline-content {
+    margin-right: auto;
+    margin-left: 0;
+    text-align: right;
+}
+
+.timeline-item:nth-child(even) .timeline-content {
+    margin-left: auto;
+    text-align: left;
+}
+
+.timeline-date {
+    display: inline-block;
+    background-color: var(--primary-light);
+    border: 1px solid var(--primary-border);
+    color: var(--primary-color);
+    padding: 4px 16px;
+    border-radius: 50px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    margin-bottom: 12px;
+}
+
+.timeline-title {
+    color: var(--text-primary);
+    font-size: 1.15rem;
+    margin-bottom: 8px;
+}
+
+.timeline-institution {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    margin-bottom: 8px;
+}
+
+.timeline-description {
+    color: var(--text-muted);
+    font-size: 0.88rem;
+    line-height: 1.6;
+    margin-bottom: 0;
+}
+
 .timeline-responsibilities {
     list-style: none;
     padding: 0;
@@ -618,7 +761,6 @@ a {
     font-weight: 700;
 }
 
-/* Timeline responsive text alignment for list items */
 .timeline-item:nth-child(odd) .timeline-responsibilities {
     text-align: left;
 }
@@ -759,12 +901,6 @@ a {
     gap: 12px;
 }
 
-.skill-icon {
-    width: 30px;
-    height: 30px;
-    object-fit: contain;
-}
-
 .skill-icon-bootstrap {
     font-size: 1.5rem;
     color: var(--primary-color);
@@ -821,117 +957,7 @@ a {
     margin: 0;
 }
 
-/* ========== EDUCATION TIMELINE ========== */
-.education-timeline {
-    position: relative;
-    padding: 20px 0;
-}
-
-.education-timeline::before {
-    content: '';
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 2px;
-    height: 100%;
-    background: linear-gradient(180deg, var(--primary-color), rgba(246, 81, 41, 0.1));
-}
-
-.timeline-item {
-    position: relative;
-    margin-bottom: 50px;
-}
-
-.timeline-item:last-child {
-    margin-bottom: 0;
-}
-
-.timeline-marker {
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 16px;
-    height: 16px;
-    background-color: var(--primary-color);
-    border: 3px solid var(--bg-primary);
-    border-radius: 50%;
-    z-index: 10;
-    box-shadow: 0 0 0 4px var(--primary-light);
-}
-
-.timeline-content {
-    background-color: var(--bg-card);
-    border: 1px solid var(--border-color);
-    padding: 28px;
-    border-radius: 12px;
-    box-shadow: var(--shadow-sm);
-    width: 44%;
-}
-
-.timeline-content:hover {
-    transform: translateY(-4px);
-    box-shadow: var(--shadow-md);
-    border-color: var(--primary-border);
-}
-
-.timeline-item:nth-child(odd) .timeline-content {
-    margin-right: auto;
-    margin-left: 0;
-    text-align: right;
-}
-
-.timeline-item:nth-child(even) .timeline-content {
-    margin-left: auto;
-    text-align: left;
-}
-
-.timeline-date {
-    display: inline-block;
-    background-color: var(--primary-light);
-    border: 1px solid var(--primary-border);
-    color: var(--primary-color);
-    padding: 4px 16px;
-    border-radius: 50px;
-    font-size: 0.8rem;
-    font-weight: 600;
-    margin-bottom: 12px;
-}
-
-.timeline-title {
-    color: var(--text-primary);
-    font-size: 1.15rem;
-    margin-bottom: 8px;
-}
-
-.timeline-institution {
-    color: var(--text-secondary);
-    font-size: 0.9rem;
-    margin-bottom: 8px;
-}
-
-.timeline-description {
-    color: var(--text-muted);
-    font-size: 0.88rem;
-    line-height: 1.6;
-    margin-bottom: 0;
-}
-
-.btn-certificate {
-    background-color: transparent;
-    border: 1px solid var(--primary-color);
-    color: var(--primary-color) !important;
-    font-size: 0.8rem;
-    padding: 5px 16px;
-    border-radius: 50px;
-    margin-top: 10px;
-}
-
-.btn-certificate:hover {
-    background-color: var(--primary-color);
-    color: #fff !important;
-}
-
-/* Certificate Cards */
+/* ========== CERTIFICATES ========== */
 .certificate-card {
     background-color: var(--bg-card);
     border: 1px solid var(--border-color);
@@ -1141,7 +1167,7 @@ a {
 
 /* ========== PROJECT DETAIL PAGE ========== */
 .project-hero-section {
-    background: linear-gradient(135deg, var(--primary-color), #d43b15);
+    background: linear-gradient(135deg, var(--primary-color), #de7052);
     padding: 160px 0 80px;
 }
 
@@ -1162,7 +1188,7 @@ a {
     color: #fff;
 }
 
-.breadcrumb-item + .breadcrumb-item::before {
+.breadcrumb-item+.breadcrumb-item::before {
     color: rgba(255, 255, 255, 0.5);
 }
 
@@ -1358,12 +1384,6 @@ a {
     border-radius: 8px;
 }
 
-/* ========== SELECTION ========== */
-::selection {
-    background-color: var(--primary-color);
-    color: #fff;
-}
-
 /* ========== SCROLL ANIMATIONS ========== */
 .scroll-animation {
     opacity: 0;
@@ -1376,30 +1396,7 @@ a {
     transform: translateY(0);
 }
 
-/* ========== NOTIFICATION ANIMATIONS ========== */
-@keyframes slideInRight {
-    from {
-        transform: translateX(100%);
-        opacity: 0;
-    }
-    to {
-        transform: translateX(0);
-        opacity: 1;
-    }
-}
-
-@keyframes slideOutRight {
-    from {
-        transform: translateX(0);
-        opacity: 1;
-    }
-    to {
-        transform: translateX(100%);
-        opacity: 0;
-    }
-}
-
-/* ========== LIGHT MODE - BADGE ADJUSTMENTS ========== */
+/* ========== LIGHT MODE — BADGE ADJUSTMENTS ========== */
 [data-theme="light"] .badge.bg-success {
     background-color: #198754 !important;
 }
