@@ -4,436 +4,114 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="Portafolio profesional de Luisa Fernanda Sánchez - Detalle de Proyecto">
-    <meta name="author" content="Luisa Fernanda Sánchez">
+    <meta name="description" content="Detalle de proyecto | Portafolio de Breiner Guisao">
+    <meta name="author" content="Breiner Stiven Guisao Rodriguez">
+    <title id="pageTitle">Detalle del Proyecto</title>
 
-    <title>Luisa Sánchez - Detalle del Proyecto</title>
-
-    <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@100;200;400;700&display=swap" rel="stylesheet">
-
-    <!-- Bootstrap 5 CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
-
-    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-
-    <!-- Custom CSS -->
     <link href="css/style.css" rel="stylesheet">
-
-    <!-- Favicon -->
     <link rel="icon" href="images/favicon.png" type="image/png">
 </head>
 
-<body>
+<body data-theme="dark">
 
-    <!-- ========== NAVBAR ========== -->
-    <nav class="navbar navbar-expand-lg fixed-top">
-        <div class="container">
-            <a class="navbar-brand" href="index.html">
-                <span id="navbar-title">Luisa Sánchez</span>
-            </a>
+    <!-- Navbar inyectado por JS -->
+    <nav class="navbar navbar-expand-lg fixed-top" id="detailNavbar"></nav>
 
-            <button class="btn btn-theme-toggle d-lg-none ms-auto me-3" id="themeToggle" aria-label="Cambiar tema">
-                <i class="bi bi-moon-stars-fill"></i>
-            </button>
-
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav align-items-lg-center ms-auto me-lg-3">
-                    <li class="nav-item">
-                        <a class="nav-link" href="index.html#hero">Inicio</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="index.html#about">Sobre Mí</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="index.html#projects">Proyectos</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="index.html#contact">Contacto</a>
-                    </li>
-                </ul>
-
-                <button class="btn btn-theme-toggle d-none d-lg-block me-3" id="themeToggleDesktop" aria-label="Cambiar tema">
-                    <i class="bi bi-moon-stars-fill"></i>
-                </button>
-
-                <a href="index.html#projects" class="btn custom-btn d-lg-block d-none">
-                    <i class="bi bi-arrow-left me-2"></i>Volver
-                </a>
-            </div>
-        </div>
-    </nav>
-
-
-    <!-- ========== PROJECT HERO ========== -->
+    <!-- HERO -->
     <section class="project-hero-section">
         <div class="container">
             <div class="row">
                 <div class="col-12 text-center">
-                    <!-- Breadcrumb -->
                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb justify-content-center">
                             <li class="breadcrumb-item"><a href="index.html">Inicio</a></li>
                             <li class="breadcrumb-item"><a href="index.html#projects">Proyectos</a></li>
-                            <li class="breadcrumb-item active" aria-current="page" id="projectBreadcrumb">Proyecto</li>
+                            <li class="breadcrumb-item active" id="projectBreadcrumb">Proyecto</li>
                         </ol>
                     </nav>
-
-                    <h1 class="project-detail-title mb-3">Nombre del Proyecto</h1>
-
-                    <p class="project-detail-subtitle">Una breve descripción impactante del proyecto</p>
-
-                    <!-- Project Meta Info -->
-                    <div class="project-meta-info mt-4">
-                        <span class="project-meta-item">
-                            <i class="bi bi-calendar3 me-2"></i>
-                            <strong>Fecha:</strong> Enero 2025
-                        </span>
-                        <span class="project-meta-item">
-                            <i class="bi bi-person me-2"></i>
-                            <strong>Rol:</strong> Desarrolladora
-                        </span>
-                        <span class="project-meta-item">
-                            <i class="bi bi-clock me-2"></i>
-                            <strong>Duración:</strong> 2 meses
-                        </span>
-                    </div>
-
-                    <!-- Project Links -->
-                    <div class="project-links mt-4">
-                        <a href="#" target="_blank" class="btn custom-btn me-2">
-                            <i class="bi bi-github me-2"></i>Ver Código
-                        </a>
-                        <a href="#" target="_blank" class="btn btn-outline-light">
-                            <i class="bi bi-box-arrow-up-right me-2"></i>Demo en Vivo
-                        </a>
-                    </div>
+                    <h1 class="project-detail-title mb-3" id="projectTitle"></h1>
+                    <p class="project-detail-subtitle" id="projectSubtitle"></p>
+                    <div class="project-meta-info mt-4" id="projectMeta"></div>
+                    <div class="project-links-buttons mt-4" id="projectLinksButtons"></div>
+                    <div class="project-links-demo mt-3" id="projectLinksDemo"></div>
                 </div>
             </div>
         </div>
     </section>
 
-
-    <!-- ========== PROJECT GALLERY ========== -->
+    <!-- GALERÍA -->
     <section class="project-gallery-section section-padding">
         <div class="container">
             <div class="row">
                 <div class="col-12">
                     <div class="project-main-image mb-4">
-                        <img src="images/projects/project1-detail.jpg" class="img-fluid rounded shadow-lg" alt="Proyecto principal">
+                        <img id="projectMainImage" src="" class="img-fluid rounded shadow-lg" alt="proyecto principal">
                     </div>
                 </div>
             </div>
-
-            <div class="row mt-4">
-                <div class="col-lg-4 col-md-6 col-12 mb-4">
-                    <div class="project-screenshot">
-                        <img src="images/projects/project1-screenshot1.jpg" class="img-fluid rounded" alt="Captura 1">
-                    </div>
-                </div>
-                <div class="col-lg-4 col-md-6 col-12 mb-4">
-                    <div class="project-screenshot">
-                        <img src="images/projects/project1-screenshot2.jpg" class="img-fluid rounded" alt="Captura 2">
-                    </div>
-                </div>
-                <div class="col-lg-4 col-md-6 col-12 mb-4">
-                    <div class="project-screenshot">
-                        <img src="images/projects/project1-screenshot3.jpg" class="img-fluid rounded" alt="Captura 3">
-                    </div>
-                </div>
-            </div>
+            <div class="row mt-4" id="projectGallery"></div>
         </div>
     </section>
 
-
-    <!-- ========== PROJECT DETAILS ========== -->
+    <!-- DETALLE -->
     <section class="project-details-section section-padding section-bg">
         <div class="container">
             <div class="row">
-
-                <!-- Project Description -->
                 <div class="col-lg-8 col-12 mb-5 mb-lg-0">
                     <h2 class="mb-4">Descripción del Proyecto</h2>
-
-                    <div class="project-description">
-                        <p>
-                            Escribe aquí una descripción detallada del proyecto. Explica el problema
-                            que resuelve, las características principales, y por qué es importante.
-                        </p>
-
-                        <h4 class="mt-4 mb-3">Características Principales</h4>
-                        <ul class="project-features-list">
-                            <li><i class="bi bi-check-circle-fill me-2"></i>Característica 1 del proyecto</li>
-                            <li><i class="bi bi-check-circle-fill me-2"></i>Característica 2 del proyecto</li>
-                            <li><i class="bi bi-check-circle-fill me-2"></i>Característica 3 del proyecto</li>
-                            <li><i class="bi bi-check-circle-fill me-2"></i>Característica 4 del proyecto</li>
-                        </ul>
-
-                        <h4 class="mt-4 mb-3">Desafíos y Soluciones</h4>
-                        <p>
-                            Describe los desafíos técnicos que enfrentaste durante el desarrollo
-                            y cómo los resolviste.
-                        </p>
-
-                        <h4 class="mt-4 mb-3">Resultados</h4>
-                        <p>
-                            Menciona los resultados obtenidos: funcionalidades logradas, mejoras de
-                            rendimiento, feedback positivo, etc.
-                        </p>
-                    </div>
+                    <div class="project-description" id="projectDescription"></div>
                 </div>
-
-                <!-- Project Sidebar Info -->
                 <div class="col-lg-4 col-12">
-
-                    <!-- Technologies Used -->
                     <div class="project-info-box mb-4">
-                        <h4 class="mb-3">
-                            <i class="bi bi-code-slash me-2"></i>Tecnologías Utilizadas
-                        </h4>
-                        <div class="tech-stack-list">
-                            <span class="tech-badge">HTML5</span>
-                            <span class="tech-badge">CSS3</span>
-                            <span class="tech-badge">JavaScript</span>
-                            <span class="tech-badge">Bootstrap</span>
-                            <span class="tech-badge">PHP</span>
-                            <span class="tech-badge">Laravel</span>
-                            <span class="tech-badge">MySQL</span>
-                        </div>
+                        <h4 class="mb-3"><i class="bi bi-code-slash me-2"></i>Tecnologías Utilizadas</h4>
+                        <div class="tech-stack-list" id="projectTech"></div>
                     </div>
-
-                    <!-- Tools Used -->
                     <div class="project-info-box mb-4">
-                        <h4 class="mb-3">
-                            <i class="bi bi-tools me-2"></i>Herramientas
-                        </h4>
-                        <div class="tech-stack-list">
-                            <span class="tech-badge">Git</span>
-                            <span class="tech-badge">VS Code</span>
-                            <span class="tech-badge">Figma</span>
-                            <span class="tech-badge">Postman</span>
-                        </div>
+                        <h4 class="mb-3"><i class="bi bi-tools me-2"></i>Herramientas</h4>
+                        <div class="tech-stack-list" id="projectTools"></div>
                     </div>
-
-                    <!-- Project Stats -->
-                    <div class="project-info-box mb-4">
-                        <h4 class="mb-3">
-                            <i class="bi bi-graph-up me-2"></i>Estadísticas
-                        </h4>
-                        <ul class="project-stats-list">
-                            <li>
-                                <span class="stat-label">Líneas de Código:</span>
-                                <span class="stat-value">~3,000</span>
-                            </li>
-                            <li>
-                                <span class="stat-label">Commits:</span>
-                                <span class="stat-value">60+</span>
-                            </li>
-                            <li>
-                                <span class="stat-label">Duración:</span>
-                                <span class="stat-value">2 meses</span>
-                            </li>
-                        </ul>
+                    <div class="project-info-box mb-4 d-none" id="projectStatsBox">
+                        <h4 class="mb-3"><i class="bi bi-graph-up me-2"></i>Estadísticas</h4>
+                        <ul class="project-stats-list" id="projectStats"></ul>
                     </div>
-
-                    <!-- Project Links -->
-                    <div class="project-info-box">
-                        <h4 class="mb-3">
-                            <i class="bi bi-link-45deg me-2"></i>Enlaces
-                        </h4>
-                        <div class="d-grid gap-2">
-                            <a href="#" target="_blank" class="btn btn-outline-primary">
-                                <i class="bi bi-github me-2"></i>Repositorio GitHub
-                            </a>
-                            <a href="#" target="_blank" class="btn btn-outline-primary">
-                                <i class="bi bi-box-arrow-up-right me-2"></i>Ver Demo
-                            </a>
-                            <a href="#" target="_blank" class="btn btn-outline-primary">
-                                <i class="bi bi-file-earmark-text me-2"></i>Documentación
-                            </a>
-                        </div>
+                    <div class="project-info-box d-none" id="projectExtraLinksBox">
+                        <h4 class="mb-3"><i class="bi bi-link-45deg me-2"></i>Enlaces</h4>
+                        <div class="d-grid gap-2" id="projectExtraLinks"></div>
                     </div>
-
                 </div>
-
             </div>
         </div>
     </section>
 
-
-    <!-- ========== PROJECT TEAM ========== -->
-    <section class="project-team-section section-padding">
+    <!-- EQUIPO -->
+    <section class="project-team-section section-padding" id="projectTeamSection">
         <div class="container">
             <div class="row">
                 <div class="col-12 text-center mb-5">
-                    <h2 class="mb-3">Equipo del Proyecto</h2>
-                    <p class="section-description">Personas que colaboraron en este proyecto</p>
+                    <h2 class="mb-3">Equipo</h2>
+                    <p class="section-description" id="teamDescription"></p>
                 </div>
             </div>
-
-            <div class="row justify-content-center">
-
-                <!-- Luisa -->
-                <div class="col-lg-3 col-md-6 col-12 mb-4">
-                    <div class="team-member-card">
-                        <div class="team-member-image">
-                            <img src="images/perfil.jpg" class="img-fluid rounded-circle" alt="Luisa Sánchez">
-                        </div>
-                        <div class="team-member-info">
-                            <h5 class="team-member-name">Luisa Sánchez</h5>
-                            <p class="team-member-role">Desarrolladora</p>
-                            <p class="team-member-contribution">
-                                Frontend, Backend, Gestión del proyecto
-                            </p>
-                            <div class="team-member-social">
-                                <a href="https://github.com/Luisa-039" target="_blank" aria-label="GitHub">
-                                    <i class="bi bi-github"></i>
-                                </a>
-                                <a href="mailto:fers86113@gmail.com" aria-label="Email">
-                                    <i class="bi bi-envelope"></i>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Colaborador (si aplica) -->
-                <div class="col-lg-3 col-md-6 col-12 mb-4">
-                    <div class="team-member-card">
-                        <div class="team-member-image">
-                            <img src="images/team/colaborador1.jpg" class="img-fluid rounded-circle" alt="Colaborador">
-                        </div>
-                        <div class="team-member-info">
-                            <h5 class="team-member-name">Nombre Colaborador</h5>
-                            <p class="team-member-role">Rol del colaborador</p>
-                            <p class="team-member-contribution">
-                                Descripción de su aporte al proyecto
-                            </p>
-                            <div class="team-member-social">
-                                <a href="#" target="_blank" aria-label="GitHub">
-                                    <i class="bi bi-github"></i>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-
-            <!-- Si fue proyecto individual -->
-            <div class="row mt-4 d-none" id="soloProjectNotice">
-                <div class="col-12 text-center">
-                    <div class="alert alert-info">
-                        <i class="bi bi-info-circle me-2"></i>
-                        Este proyecto fue desarrollado de forma individual.
-                    </div>
-                </div>
-            </div>
-
+            <div class="row justify-content-center" id="projectTeam"></div>
         </div>
     </section>
 
-
-    <!-- ========== RELATED PROJECTS ========== -->
-    <section class="related-projects-section section-padding section-bg">
-        <div class="container">
-            <div class="row">
-                <div class="col-12 text-center mb-5">
-                    <h2 class="mb-3">Proyectos Relacionados</h2>
-                    <p class="section-description">Otros proyectos que podrían interesarte</p>
-                </div>
-            </div>
-
-            <div class="row justify-content-center">
-
-                <div class="col-lg-4 col-md-6 col-12 mb-4">
-                    <div class="project-card">
-                        <div class="project-image-wrap">
-                            <img src="images/projects/project2.jpg" class="project-image img-fluid" alt="Proyecto 2">
-                            <div class="project-overlay">
-                                <a href="project-detail.html?id=2" class="btn btn-project-detail">
-                                    Ver Detalles <i class="bi bi-arrow-right ms-2"></i>
-                                </a>
-                            </div>
-                        </div>
-                        <div class="project-info">
-                            <h4 class="project-title">Sistema de Gestión Administrativa</h4>
-                            <p class="project-brief">Aplicación web para gestión documental y control de procesos.</p>
-                            <div class="project-tech-tags">
-                                <span class="tech-tag">Laravel</span>
-                                <span class="tech-tag">PHP</span>
-                                <span class="tech-tag">MySQL</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-
-            <div class="row mt-4">
-                <div class="col-12 text-center">
-                    <a href="index.html#projects" class="btn custom-btn">
-                        <i class="bi bi-grid-3x3-gap me-2"></i>Ver Todos los Proyectos
-                    </a>
-                </div>
-            </div>
-
-        </div>
-    </section>
-
-
-    <!-- ========== FOOTER ========== -->
-    <footer class="site-footer">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-6 col-12 text-center text-lg-start mb-4">
-                    <h4 class="text-white mb-3">Luisa Fernanda Sánchez</h4>
-                    <p class="text-white-50">Tecnóloga en Análisis y Desarrollo de Software & Auxiliar Administrativa</p>
-                </div>
-                <div class="col-lg-6 col-12 d-flex justify-content-center justify-content-lg-end align-items-center">
-                    <ul class="social-icon">
-                        <li class="social-icon-item">
-                            <a href="https://github.com/Luisa-039" target="_blank" class="social-icon-link">
-                                <span class="bi-github"></span>
-                            </a>
-                        </li>
-                        <li class="social-icon-item">
-                            <a href="mailto:fers86113@gmail.com" class="social-icon-link">
-                                <span class="bi-envelope"></span>
-                            </a>
-                        </li>
-                        <li class="social-icon-item">
-                            <a href="tel:+573205703024" class="social-icon-link">
-                                <span class="bi-telephone"></span>
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-            <div class="row mt-5">
-                <div class="col-12 text-center">
-                    <p class="copyright-text text-white-50">
-                        © 2025 Luisa Fernanda Sánchez. Todos los derechos reservados.
-                    </p>
-                </div>
-            </div>
-        </div>
-    </footer>
+    <!-- Footer inyectado por JS -->
+    <footer class="site-footer" id="siteFooter"></footer>
 
     <button id="scrollTopBtn" class="scroll-top-btn" aria-label="Volver arriba">
         <i class="bi bi-arrow-up"></i>
     </button>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
-    <script src="js/github-api.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+        crossorigin="anonymous"></script>
+    <script src="js/portfolio-data.js"></script>
     <script src="js/main.js"></script>
 </body>
 
