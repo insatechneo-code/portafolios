@@ -17,15 +17,15 @@ const PORTFOLIO = {
         phoneFormatted: '+57 320 655 4202',
         location: 'Pereira, Risaralda, Colombia',
         github: 'https://github.com/Breiner1412',
-        linkedin: 'https://linkedin.com/in/breiner-guisao',
+        // linkedin: ... (puedes borrar esto si no lo usas)
         photo: 'images/perfil.jpg',
     },
 
     socialLinks: [
         { url: 'https://github.com/Breiner1412', icon: 'bi-github', label: 'GitHub' },
-        { url: 'https://linkedin.com/in/breiner-guisao', icon: 'bi-linkedin', label: 'LinkedIn' },
         { url: 'mailto:rodriguezbreiner125@gmail.com', icon: 'bi-envelope', label: 'Email' },
-        { url: 'tel:+573206554202', icon: 'bi-telephone', label: 'Teléfono' },
+        { url: 'https://wa.me/573205703024?text=%C2%A1Hola!%20Vi%20tu%20portafolio%20y%20me%20gustar%C3%ADa%20conocer%20más%20sobre%20tus%20servicios.', icon: 'bi-whatsapp', label: 'WhatsApp' }
+        // Elimina LinkedIn o cualquier otra red que no desees mostrar
     ],
 
     experience: [
@@ -110,7 +110,8 @@ const PORTFOLIO = {
                     contribution: 'Arquitectura, desarrollo, integración con Firebase y despliegue',
                     photo: 'images/perfil.jpg',
                     github: 'https://github.com/Breiner1412',
-                    linkedin: 'https://linkedin.com/in/breiner-guisao',
+                    email: 'rodriguezbreiner125@gmail.com',
+                    whatsapp: 'https://wa.me/573206554202?text=%C2%A1Hola!%20Vi%20tu%20portafolio%20y%20me%20gustar%C3%ADa%20conocer%20m%C3%A1s%20sobre%20tus%20servicios.'
                 },
             ],
             extraLinks: [
