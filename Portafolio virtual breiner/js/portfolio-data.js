@@ -343,42 +343,61 @@ const PORTFOLIO = {
             category: 'Lenguajes de Programación',
             icon: 'bi-code-square',
             items: [
-                { name: 'JavaScript', icon: 'bi-filetype-js', level: 'En práctica' },
+                { name: 'JavaScript', icon: 'bi-filetype-js', level: 'Sólido' },
+                { name: 'TypeScript', icon: 'bi-filetype-tsx', level: 'En práctica' },
                 { name: 'PHP', icon: 'bi-filetype-php', level: 'En práctica' },
                 { name: 'Python', icon: 'bi-filetype-py', level: 'En práctica' },
                 { name: 'HTML5 & CSS3', icon: 'bi-filetype-html', level: 'Sólido' },
+                { name: 'SQL', icon: 'bi-database', level: 'Sólido' },
             ],
         },
         {
             category: 'Frameworks y Librerías',
             icon: 'bi-layers',
             items: [
-                { name: 'Laravel', icon: 'bi-braces', level: 'En práctica' },
+                { name: 'Next.js', icon: 'bi-triangle', level: 'En práctica' },
                 { name: 'React', icon: 'bi-code-slash', level: 'En práctica' },
+                { name: 'Laravel & Livewire', icon: 'bi-braces', level: 'En práctica' },
                 { name: 'FastAPI', icon: 'bi-lightning-charge', level: 'En práctica' },
+                { name: 'Tailwind CSS', icon: 'bi-wind', level: 'En práctica' },
                 { name: 'Bootstrap', icon: 'bi-bootstrap', level: 'Sólido' },
             ],
         },
         {
-            category: 'Herramientas y Tecnologías',
-            icon: 'bi-tools',
+            category: 'Bases de Datos y Servicios',
+            icon: 'bi-database',
             items: [
-                { name: 'Git & GitHub', icon: 'bi-git', level: 'Sólido' },
-                { name: 'Bases de Datos SQL', icon: 'bi-database', level: 'Sólido' },
-                { name: 'Microsoft Azure (Básico)', icon: 'bi-cloud', level: 'Explorando' },
-                { name: 'Arduino IDE', icon: 'bi-cpu', level: 'Explorando' },
-                { name: 'Windows & Linux', icon: 'bi-windows', level: 'Sólido' },
-                { name: 'Herramientas Ofimáticas', icon: 'bi-file-earmark-spreadsheet', level: 'Sólido' },
+                { name: 'Supabase (PostgreSQL)', icon: 'bi-database', level: 'En práctica' },
+                { name: 'Firebase / Firestore', icon: 'bi-fire', level: 'En práctica' },
+                { name: 'MySQL', icon: 'bi-server', level: 'En práctica' },
+                { name: 'Integración de APIs externas', icon: 'bi-plug', level: 'En práctica' },
+                { name: 'Autenticación y roles', icon: 'bi-shield-lock', level: 'En práctica' },
             ],
         },
         {
-            category: 'Mantenimiento y Hardware',
+            category: 'Despliegue y Herramientas',
+            icon: 'bi-tools',
+            items: [
+                { name: 'Git & GitHub', icon: 'bi-git', level: 'Sólido' },
+                { name: 'Vercel', icon: 'bi-rocket-takeoff', level: 'En práctica' },
+                { name: 'Render', icon: 'bi-cloud-arrow-up', level: 'En práctica' },
+                { name: 'Microsoft Azure (Básico)', icon: 'bi-cloud', level: 'Explorando' },
+                // Aún no lo has usado en un proyecto: si prefieres no mostrarlo
+                // hasta entonces, borra esta línea.
+                { name: 'WordPress', icon: 'bi-wordpress', level: 'Explorando' },
+            ],
+        },
+        {
+            category: 'Sistemas, Redes y Hardware',
             icon: 'bi-cpu',
             items: [
-                { name: 'Ensamblaje y Mantenimiento de PCs', icon: 'bi-pc-display', level: 'Sólido' },
-                { name: 'Redes y Configuración de Equipos', icon: 'bi-hdd-network', level: 'Sólido' },
-                { name: 'Diagnóstico de Problemas Técnicos', icon: 'bi-wrench', level: 'Sólido' },
-                { name: 'Instalación de Software y SO', icon: 'bi-download', level: 'Sólido' },
+                { name: 'Ensamblaje y mantenimiento de PCs', icon: 'bi-pc-display', level: 'Sólido' },
+                { name: 'Redes y configuración de equipos', icon: 'bi-hdd-network', level: 'Sólido' },
+                { name: 'Diagnóstico de fallas', icon: 'bi-wrench', level: 'Sólido' },
+                { name: 'Instalación de software y SO', icon: 'bi-download', level: 'Sólido' },
+                { name: 'Windows & Linux', icon: 'bi-windows', level: 'Sólido' },
+                { name: 'Herramientas ofimáticas', icon: 'bi-file-earmark-spreadsheet', level: 'Sólido' },
+                { name: 'Arduino IDE', icon: 'bi-cpu', level: 'Explorando' },
             ],
         },
     ],
@@ -415,20 +434,44 @@ const PORTFOLIO = {
         },
     ],
 
+    // 'issuer' = quién lo expide. 'detail' = una línea de qué aprendiste.
+    // 'url' es opcional: si tienes el certificado verificable en línea (Cisco y
+    // Capacítate los dan), pega el enlace y la tarjeta se vuelve clicable.
     certificates: [
         {
+            name: 'Cybersecurity Essentials',
+            issuer: 'Cisco Networking Academy',
+            date: 'Noviembre 2023',
+            detail: 'Fundamentos de seguridad informática: amenazas, criptografía y protección de datos.',
+            url: '',
+        },
+        {
+            name: 'Técnico en Redes de Datos',
+            issuer: 'Capacítate para el Empleo — Fundación Carlos Slim',
+            date: 'Marzo 2023 · 61 horas',
+            detail: 'Instalación y configuración de redes cableadas e inalámbricas.',
+            url: '',
+        },
+        {
             name: 'Ensamble y Mantenimiento de Computadores',
-            issuer: 'Desarrollo de habilidades en ensamblaje, configuración y reparación de hardware, instalación de sistemas operativos y optimización de equipos.',
+            issuer: '',
+            date: '',
+            detail: 'Ensamblaje, configuración y reparación de hardware, instalación de sistemas operativos y optimización de equipos.',
+            url: '',
         },
         {
             name: 'Técnico Laboral en Sistemas',
             issuer: 'Instituto Comfamiliar Risaralda',
             date: '2022 - 2024',
+            detail: '',
+            url: '',
         },
         {
-            name: 'Tecnólogo ADSO',
+            name: 'Tecnólogo en Análisis y Desarrollo de Software',
             issuer: 'SENA',
             date: '2024 - 2026',
+            detail: '',
+            url: '',
         },
     ],
 };

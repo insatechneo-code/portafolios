@@ -449,6 +449,25 @@
         </div>`;
     });
 
+    // No todos los proyectos tienen demo o capturas presentables; el resto vive
+    // en GitHub y quien busca código va a querer ese enlace.
+    const ctaBox = $('projectsGithubCta');
+    if (ctaBox && isExternal(owner.github)) {
+      ctaBox.innerHTML = `
+        <div class="github-cta">
+          <i class="bi bi-github github-cta-icon"></i>
+          <div class="github-cta-text">
+            <strong>Más proyectos de desarrollo en mi perfil de GitHub</strong>
+            <span>Aquí están los que puedo mostrar con demo y capturas. El resto del código,
+            incluidos los ejercicios y proyectos en curso, está en mi perfil.</span>
+          </div>
+          <a href="${esc(owner.github)}" target="_blank" rel="noopener noreferrer"
+             class="btn btn-outline-brand github-cta-btn">
+            Ver mi GitHub <i class="bi bi-arrow-right ms-2"></i>
+          </a>
+        </div>`;
+    }
+
     // El aviso solo tiene sentido si hay demos publicadas.
     const noteBox = $('projectsHostingNote');
     if (noteBox) {
@@ -471,7 +490,7 @@
             const nivel = s.level || 'En práctica';
             const slug = { 'Sólido': 'solido', 'En práctica': 'practica', 'Explorando': 'explorando' }[nivel] || 'practica';
             return `
-            <div class="col-lg-6 col-12 mb-4">
+            <div class="col-xl-4 col-lg-6 col-12 mb-3">
               <div class="skill-item skill-item--level">
                 <div class="skill-header">
                   <div class="skill-icon-name">
@@ -518,16 +537,28 @@
       </div>`));
   }
 
+  // Tarjeta horizontal: sello a la izquierda, datos a la derecha. Con el
+  // formato anterior (todo centrado, una columna de tres) la sección se veía
+  // vacía cuando había pocos certificados.
   function renderCertificates() {
-    fill('certificatesGrid', renderList(certificates, (c) => `
-      <div class="col-lg-4 col-md-6 col-12 mb-4">
-        <div class="certificate-card">
-          <div class="certificate-icon"><i class="bi bi-patch-check-fill"></i></div>
-          <h5 class="certificate-name">${c.name}</h5>
-          <p class="certificate-issuer">${c.issuer}</p>
-          ${c.date ? `<span class="certificate-date">${c.date}</span>` : ''}
-        </div>
-      </div>`));
+    fill('certificatesGrid', renderList(certificates, (c) => {
+      const inner = `
+        <div class="certificate-icon"><i class="bi bi-patch-check-fill"></i></div>
+        <div class="certificate-body">
+          <h5 class="certificate-name">${esc(c.name)}</h5>
+          ${c.issuer ? `<p class="certificate-issuer">${esc(c.issuer)}</p>` : ''}
+          ${c.detail ? `<p class="certificate-detail">${esc(c.detail)}</p>` : ''}
+          ${c.date ? `<span class="certificate-date">${esc(c.date)}</span>` : ''}
+          ${isExternal(c.url) ? '<span class="certificate-link">Ver certificado <i class="bi bi-box-arrow-up-right"></i></span>' : ''}
+        </div>`;
+
+      // Si hay enlace verificable, la tarjeta entera es el enlace.
+      const card = isExternal(c.url)
+        ? `<a href="${esc(c.url)}" target="_blank" rel="noopener noreferrer" class="certificate-card certificate-card--link">${inner}</a>`
+        : `<div class="certificate-card">${inner}</div>`;
+
+      return `<div class="col-lg-6 col-12 mb-4">${card}</div>`;
+    }));
   }
 
   function renderContactInfo() {
