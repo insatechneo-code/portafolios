@@ -235,7 +235,7 @@ const PORTFOLIO = {
                 { label: 'Nombre artístico', value: 'Usado con autorización de Sebastián Rincón' },
             ],
             description: `
-        <p class="alert alert-secondary"><i class="bi bi-info-circle me-2"></i><strong>Proyecto de
+        <p class="project-notice"><i class="bi bi-info-circle me-2"></i><strong>Proyecto de
         demostración.</strong> Este sitio no está en uso oficial ni vende boletas de verdad: es una
         versión funcional que desarrollé por mi cuenta. El comediante Sebastián Rincón autorizó el uso
         de su nombre artístico para mostrarlo aquí.</p>

@@ -854,15 +854,18 @@ a {
 }
 
 .tech-tag,
+/* Se usan en la barra lateral del detalle. En naranja eran siete etiquetas
+   compitiendo entre ellas; en neutro se leen como una lista y el naranja
+   queda libre para los enlaces y los íconos. */
 .tech-badge {
-    background-color: var(--primary-light);
-    border: 1px solid var(--primary-border);
-    color: var(--primary-color);
-    padding: 4px 12px;
-    border-radius: 50px;
-    font-size: 0.75rem;
-    font-weight: 600;
-    letter-spacing: 0.3px;
+    background-color: var(--bg-input);
+    border: 1px solid var(--border-color);
+    color: var(--text-primary);
+    padding: 5px 12px;
+    border-radius: 6px;
+    font-size: 0.78rem;
+    font-weight: 500;
+    letter-spacing: 0.2px;
 }
 
 /* ========== SKILLS SECTION ========== */
@@ -1166,56 +1169,202 @@ a {
 }
 
 /* ========== PROJECT DETAIL PAGE ========== */
+/* El naranja a pantalla completa competía con las capturas y dejaba sin
+   contraste a los botones y avisos. Ahora el hero usa el fondo del sitio con
+   un halo suave del color de marca, y el naranja se reserva para lo que hay
+   que mirar: el botón principal y los acentos. */
 .project-hero-section {
-    background: linear-gradient(135deg, var(--primary-color), #de7052);
-    padding: 160px 0 80px;
+    position: relative;
+    padding: 130px 0 70px;
+    background:
+        radial-gradient(760px 340px at 12% 0%, var(--primary-light), transparent 65%),
+        var(--bg-secondary);
+    border-bottom: 1px solid var(--border-color);
+    overflow: hidden;
+}
+
+/* Línea de acento sobre el borde inferior */
+.project-hero-section::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -1px;
+    width: min(420px, 45%);
+    height: 2px;
+    background: linear-gradient(90deg, var(--primary-color), transparent);
 }
 
 .breadcrumb {
     background-color: transparent;
+    font-size: 0.88rem;
 }
 
 .breadcrumb-item a {
-    color: rgba(255, 255, 255, 0.7);
+    color: var(--text-muted);
     text-decoration: none;
 }
 
 .breadcrumb-item a:hover {
-    color: #fff;
+    color: var(--primary-color);
 }
 
 .breadcrumb-item.active {
-    color: #fff;
+    color: var(--text-secondary);
 }
 
 .breadcrumb-item+.breadcrumb-item::before {
-    color: rgba(255, 255, 255, 0.5);
+    color: var(--text-muted);
 }
 
 .project-detail-title {
-    color: #fff;
-    font-size: clamp(1.8rem, 4vw, 2.8rem);
+    color: var(--text-primary);
+    font-size: clamp(1.7rem, 3.4vw, 2.5rem);
+    line-height: 1.15;
 }
 
 .project-detail-subtitle {
-    color: rgba(255, 255, 255, 0.85);
-    font-size: 1.1rem;
+    color: var(--text-secondary);
+    font-size: 1.05rem;
+    max-width: 46ch;
 }
 
+/* La ficha de datos: etiqueta apagada, valor destacado. Se lee de un vistazo
+   sin gritar. */
 .project-meta-info {
     display: flex;
     flex-wrap: wrap;
-    justify-content: center;
-    gap: 12px;
+    gap: 10px;
 }
 
 .project-meta-item {
-    background-color: rgba(255, 255, 255, 0.12);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    color: #fff;
-    padding: 8px 20px;
-    border-radius: 50px;
+    display: inline-flex;
+    align-items: center;
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-color);
+    color: var(--text-primary);
+    padding: 7px 16px;
+    border-radius: 8px;
     font-size: 0.85rem;
+}
+
+.project-meta-item i {
+    color: var(--primary-color);
+}
+
+.project-meta-item strong {
+    color: var(--text-muted);
+    font-weight: 500;
+    margin-right: 6px;
+}
+
+.project-links-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+/* La captura principal, con marco: deja de ser una imagen suelta y se lee
+   como la pantalla del proyecto. */
+.project-main-image {
+    border-radius: 14px;
+    overflow: hidden;
+    border: 1px solid var(--border-color);
+    box-shadow: var(--shadow-lg);
+    background: var(--bg-card);
+    line-height: 0;
+}
+
+.project-main-image img {
+    width: 100%;
+    height: auto;
+    display: block;
+    transition: transform 0.4s ease;
+}
+
+.project-main-image:hover img {
+    transform: scale(1.02);
+}
+
+.gallery-heading {
+    font-size: 1.35rem;
+    margin-bottom: 0;
+}
+
+/* Botón secundario del hero (antes .btn-outline-light, invisible en modo claro) */
+.btn-outline-brand {
+    border: 1px solid var(--border-color);
+    color: var(--text-primary);
+    background: transparent;
+    padding: 12px 26px;
+    border-radius: 50px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.btn-outline-brand:hover,
+.btn-outline-brand:focus-visible {
+    border-color: var(--primary-color);
+    color: var(--primary-color);
+    background: var(--primary-light);
+}
+
+/* Credenciales de la demo. Antes era un alert celeste de Bootstrap que no
+   tenía nada que ver con la paleta del sitio. */
+.demo-access {
+    max-width: 460px;
+    padding: 16px 18px;
+    border: 1px solid var(--border-color);
+    border-left: 3px solid var(--primary-color);
+    border-radius: 10px;
+    background: var(--bg-card);
+}
+
+.demo-access-title {
+    font-weight: 600;
+    font-size: 0.95rem;
+    margin-bottom: 10px;
+    color: var(--text-primary);
+}
+
+.demo-access-title i {
+    color: var(--primary-color);
+}
+
+.demo-access-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 6px;
+}
+
+.demo-access-role {
+    min-width: 110px;
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+}
+
+/* Usuario y clave viajan juntos: si no caben, bajan los dos a la misma línea
+   en vez de quedar la clave suelta debajo. */
+.demo-access-creds {
+    display: inline-flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+.demo-access code {
+    padding: 3px 8px;
+    border-radius: 6px;
+    background: var(--bg-input);
+    border: 1px solid var(--border-color);
+    color: var(--text-primary);
+    font-size: 0.82rem;
+}
+
+.demo-access-hint {
+    margin: 10px 0 0;
+    font-size: 0.82rem;
+    color: var(--text-muted);
 }
 
 .project-links {
@@ -1229,8 +1378,46 @@ a {
     background-color: var(--bg-card);
     border: 1px solid var(--border-color);
     border-radius: 12px;
-    padding: 24px;
+    padding: 22px;
     box-shadow: var(--shadow-sm);
+}
+
+/* Los títulos de la barra lateral son etiquetas, no titulares: bajarlos de
+   tamaño deja que respiren las tarjetas y que mande la descripción. */
+.project-info-box h4 {
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+}
+
+.project-info-box h4 i {
+    color: var(--primary-color);
+}
+
+/* Aviso dentro de la descripción (por ejemplo, "proyecto de demostración").
+   Antes usaba .alert-secondary de Bootstrap: gris sobre gris, ilegible en
+   modo oscuro. */
+.project-notice {
+    display: block;
+    padding: 14px 18px;
+    margin-bottom: 26px;
+    border: 1px solid var(--border-color);
+    border-left: 3px solid var(--primary-color);
+    border-radius: 10px;
+    background: var(--bg-card);
+    color: var(--text-secondary);
+    font-size: 0.92rem;
+    line-height: 1.6;
+}
+
+.project-notice strong {
+    color: var(--text-primary);
+}
+
+.project-notice i {
+    color: var(--primary-color);
 }
 
 .project-features-list {
@@ -1255,17 +1442,30 @@ a {
 
 .project-description h4 {
     color: var(--text-primary);
-    margin-top: 30px;
+    font-size: 1.15rem;
+    margin-top: 34px;
+}
+
+/* Un poco más de aire y ancho de lectura cómodo en pantallas grandes. */
+.project-description {
+    max-width: 68ch;
+}
+
+.project-description .project-features-list {
+    margin-bottom: 6px;
 }
 
 .project-stats-list {
     list-style: none;
     padding: 0;
+    /* sin esto, la tarjeta queda con un hueco debajo de la última fila */
+    margin-bottom: 0;
 }
 
 .project-stats-list li {
     display: flex;
     justify-content: space-between;
+    gap: 14px;
     border-bottom: 1px solid var(--border-color);
     padding: 10px 0;
     font-size: 0.9rem;
@@ -1276,12 +1476,16 @@ a {
 }
 
 .project-stats-list .stat-label {
-    color: var(--text-secondary);
+    color: var(--text-muted);
+    flex: 0 0 auto;
 }
 
+/* Los valores iban en naranja y negrita: con tres o cuatro filas, la barra
+   lateral gritaba más que la descripción. */
 .project-stats-list .stat-value {
-    color: var(--primary-color);
-    font-weight: 600;
+    color: var(--text-primary);
+    font-weight: 500;
+    text-align: right;
 }
 
 .tech-stack-list {
@@ -1366,13 +1570,17 @@ a {
     overflow: hidden;
     position: relative;
     cursor: zoom-in;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    /* Mismo marco que la captura principal: las capturas claras necesitan un
+       borde para no flotar sueltas sobre el fondo oscuro. */
+    border: 1px solid var(--border-color);
+    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
 }
 
 .project-screenshot:hover,
 .project-screenshot:focus-visible {
     transform: scale(1.03);
     box-shadow: var(--shadow-md);
+    border-color: var(--primary-border);
 }
 
 .project-screenshot img {
@@ -1704,7 +1912,16 @@ body.lightbox-open {
 
     .project-meta-info {
         flex-direction: column;
-        align-items: center;
+        align-items: flex-start;
+    }
+
+    .project-hero-section {
+        padding: 110px 0 50px;
+    }
+
+    .project-links-buttons .btn {
+        flex: 1 1 auto;
+        text-align: center;
     }
 
     .github-repos-grid {

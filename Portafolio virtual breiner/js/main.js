@@ -672,17 +672,22 @@
     let btns = '';
     // Solo se pinta el botón si el enlace es una URL real.
     if (isExternal(p.github)) btns += `<a href="${esc(p.github)}" target="_blank" rel="noopener noreferrer" class="btn custom-btn me-2"><i class="bi bi-github me-2"></i>Ver Código</a>`;
-    if (isExternal(p.demo)) btns += `<a href="${esc(p.demo)}" target="_blank" rel="noopener noreferrer" class="btn btn-outline-light"><i class="bi bi-box-arrow-up-right me-2"></i>Demo en Vivo</a>`;
+    // btn-outline-light desaparecía en modo claro: ahora usa un estilo propio
+    // que funciona en los dos temas.
+    if (isExternal(p.demo)) btns += `<a href="${esc(p.demo)}" target="_blank" rel="noopener noreferrer" class="btn btn-outline-brand"><i class="bi bi-box-arrow-up-right me-2"></i>Demo en Vivo</a>`;
     fill('projectLinksButtons', btns);
 
     let demoHtml = '';
     if (p.demoAccess?.length) {
       demoHtml += `
-        <div class="alert alert-info mt-4 mb-0 mx-auto" style="max-width:430px">
-          <i class="bi bi-key me-2"></i><strong>Acceso Demo:</strong><br>
+        <div class="demo-access mt-4">
+          <div class="demo-access-title"><i class="bi bi-key me-2"></i>Acceso de prueba</div>
           ${renderList(p.demoAccess, (d) => `
-            <div style="margin-bottom:3px"><b>${d.role}</b>: <code>${d.user}</code> | <b>Clave:</b> <code>${d.pass}</code></div>`)}
-          <span style="font-size:.92em;color:#6c757d">Puedes probar todos los roles en la demo online</span>
+            <div class="demo-access-row">
+              <span class="demo-access-role">${esc(d.role)}</span>
+              <span class="demo-access-creds"><code>${esc(d.user)}</code><code>${esc(d.pass)}</code></span>
+            </div>`)}
+          <p class="demo-access-hint">Puedes entrar con cualquiera de los dos roles en la demo.</p>
         </div>`;
     }
     // Aviso de hosting gratuito: es mejor que quien entra sepa por qué la demo
@@ -728,7 +733,8 @@
     if (p.extraLinks?.length) {
       if (extraBox) extraBox.classList.remove('d-none');
       fill('projectExtraLinks', renderList(p.extraLinks, (l) =>
-        `<a href="${l.url}" target="_blank" rel="noopener noreferrer" class="btn btn-outline-primary"><i class="${l.icon} me-2"></i>${l.label}</a>`));
+        // btn-outline-primary pintaba un azul de Bootstrap que no está en la paleta.
+        `<a href="${l.url}" target="_blank" rel="noopener noreferrer" class="btn btn-outline-brand"><i class="${l.icon} me-2"></i>${l.label}</a>`));
     }
 
     const team = p.team || [];
