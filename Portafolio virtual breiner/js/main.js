@@ -12,7 +12,7 @@
     return;
   }
 
-  const { owner, socialLinks, experience, projects, projectCards,
+  const { owner, socialLinks, experience, projects, projectCards, otherProjects,
     skills, softSkills, education, certificates } = PORTFOLIO;
 
   // ========== DOM REFERENCES ==========
@@ -77,10 +77,24 @@
     themeToggles.forEach(btn => btn.addEventListener('click', toggleTheme));
   }
 
-  function toggleTheme() {
+  // El tema nuevo se revela en un círculo que crece desde el botón (View
+  // Transitions). Sin soporte o con movimiento reducido, el cambio es directo.
+  function toggleTheme(e) {
     const next = body.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
-    setTheme(next);
-    localStorage.setItem('theme', next);
+    const apply = () => {
+      setTheme(next);
+      localStorage.setItem('theme', next);
+    };
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (!document.startViewTransition || reduced) {
+      apply();
+      return;
+    }
+    const rect = e?.currentTarget?.getBoundingClientRect();
+    const root = document.documentElement;
+    root.style.setProperty('--vt-x', `${rect ? rect.left + rect.width / 2 : innerWidth / 2}px`);
+    root.style.setProperty('--vt-y', `${rect ? rect.top + rect.height / 2 : 0}px`);
+    document.startViewTransition(apply);
   }
 
   function setTheme(theme) {
@@ -97,6 +111,10 @@
     if (!navbar) return;
     onScroll(() => {
       navbar.classList.toggle('navbar-scrolled', window.scrollY > 100);
+      // Regla de lectura bajo el navbar: progreso de 0 a 1.
+      const max = document.documentElement.scrollHeight - window.innerHeight;
+      const progress = max > 0 ? Math.min(window.scrollY / max, 1) : 0;
+      navbar.style.setProperty('--scroll', progress.toFixed(4));
     });
   }
 
@@ -179,13 +197,6 @@
         if (p < 1) requestAnimationFrame(paso);
       };
       requestAnimationFrame(paso);
-    });
-  }
-
-  // ========== SKILL BARS ==========
-  function initSkillBars() {
-    observe('.skill-progress .progress-bar', (bar) => {
-      setTimeout(() => { bar.style.width = bar.dataset.width; }, 100);
     });
   }
 
@@ -309,37 +320,38 @@
 
   // ========== RENDERERS ==========
 
-  function renderSocialIcons(linksArr, withLabel = false) {
+  // Nivel de habilidad -> clave corta para CSS y para el filtro.
+  const LEVEL_SLUG = { 'Sólido': 'solido', 'En práctica': 'practica', 'Explorando': 'explorando' };
+  const levelBars = (slug) =>
+    `<span class="level-bars level-bars--${slug}" aria-hidden="true"><i></i><i></i><i></i></span>`;
+
+  // Dominio de una URL para la barra del "navegador" que enmarca las capturas.
+  const hostOf = (url) => {
+    try { return new URL(url).host; } catch (_) { return ''; }
+  };
+
+  function renderSocialIcons(linksArr) {
     const items = renderList(linksArr, (s) => `
-      <li class="social-icon-item">
+      <li>
         <a href="${s.url}" ${s.url.startsWith('mailto') || s.url.startsWith('tel') ? '' : 'target="_blank" rel="noopener noreferrer"'}
-           class="social-icon-link" aria-label="${s.label}">
-          <span class="${s.icon}"></span>
+           class="social-icon-link" aria-label="${s.label}" title="${s.label}">
+          <i class="bi ${s.icon}" aria-hidden="true"></i>
         </a>
       </li>`);
-    return `<ul class="social-icon d-flex align-items-center justify-content-center">
-      ${withLabel ? '<span class="text-white me-3">Sígueme:</span>' : ''}${items}</ul>`;
+    return `<ul class="social-icon">${items}</ul>`;
   }
 
   function renderFooter() {
     return `
-      <div class="container">
-        <div class="row">
-          <div class="col-lg-6 col-12 text-center text-lg-start mb-4">
-            <h4 class="text-white mb-3">${owner.name}</h4>
-            <p class="text-white-50">${owner.title}</p>
-          </div>
-          <div class="col-lg-6 col-12 d-flex justify-content-center justify-content-lg-end align-items-center">
-            ${renderSocialIcons(socialLinks.slice(0, 3))}
-          </div>
+      <div class="container footer-row">
+        <div>
+          <p class="footer-name">${owner.name}</p>
+          <p class="footer-meta">${owner.title}</p>
         </div>
-        <div class="row mt-5">
-          <div class="col-12 text-center">
-            <p class="copyright-text text-white-50">
-              © ${new Date().getFullYear()} ${owner.name}. Todos los derechos reservados.
-            </p>
-          </div>
-        </div>
+        ${renderSocialIcons(socialLinks)}
+        <p class="footer-meta footer-copy">
+          © ${new Date().getFullYear()} ${owner.name}. Todos los derechos reservados.
+        </p>
       </div>`;
   }
 
@@ -347,13 +359,15 @@
     const nav = $('detailNavbar');
     if (!nav) return;
     nav.innerHTML = `
+      <div class="scroll-ruler" aria-hidden="true"></div>
       <div class="container">
-        <a class="navbar-brand" href="index.html">${owner.shortName}</a>
-        <button class="btn btn-theme-toggle d-lg-none ms-auto me-3" id="themeToggle" aria-label="Cambiar tema">
+        <a class="navbar-brand" href="index.html"><span class="brand-mark" aria-hidden="true">BG</span>${owner.shortName}</a>
+        <button class="btn btn-theme-toggle d-lg-none ms-auto me-2" id="themeToggle" aria-label="Cambiar tema">
           <i class="bi bi-moon-stars-fill"></i>
         </button>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-          <span class="navbar-toggler-icon"></span>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Abrir menú">
+          <i class="bi bi-list"></i>
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
           <ul class="navbar-nav align-items-lg-center ms-auto me-lg-3">
@@ -364,7 +378,7 @@
           <button class="btn btn-theme-toggle d-none d-lg-block me-3" id="themeToggleDesktop" aria-label="Cambiar tema">
             <i class="bi bi-moon-stars-fill"></i>
           </button>
-          <a href="index.html#projects" class="btn custom-btn d-lg-block d-none">
+          <a href="index.html#projects" class="btn btn-ghost nav-cv">
             <i class="bi bi-arrow-left me-2"></i>Volver
           </a>
         </div>
@@ -380,21 +394,23 @@
     setTheme(localStorage.getItem('theme') || 'dark');
   }
 
+  // Experiencia y formación comparten formato: filas de una tabla de especificaciones.
   function renderExperience() {
     fill('experienceTimeline', renderList(experience, (exp) => `
-      <div class="timeline-item">
-        <div class="timeline-marker"></div>
-        <div class="timeline-content">
-          <span class="timeline-date"><i class="bi bi-calendar3 me-2"></i>${exp.date}</span>
-          <h4 class="timeline-title">${exp.title}</h4>
-          <p class="timeline-institution"><i class="bi bi-building me-2"></i>${exp.company}</p>
-          <ul class="timeline-responsibilities">
-            ${renderList(exp.tasks, (t) => `<li>${t}</li>`)}
-          </ul>
+      <li class="spec-row reveal">
+        <span class="spec-date">${exp.date}</span>
+        <div class="spec-main">
+          <h3 class="spec-title">${exp.title}</h3>
+          <p class="spec-org"><i class="bi bi-building me-2" aria-hidden="true"></i>${exp.company}</p>
         </div>
-      </div>`));
+        <ul class="spec-tasks" data-stagger>
+          ${renderList(exp.tasks, (t) => `<li>${t}</li>`)}
+        </ul>
+      </li>`));
   }
 
+  // Cada proyecto es una fila grande: la captura enmarcada como un navegador (con
+  // dos capturas más detrás que se abren en abanico) y al lado su ficha técnica.
   function renderProjectCards() {
     const grid = $('projectsGrid');
     if (!grid) return;
@@ -403,50 +419,54 @@
 
     if (!visibles.length) {
       grid.innerHTML = `
-        <div class="col-lg-8 col-12 mx-auto">
-          <div class="empty-state text-center">
-            <i class="bi bi-folder-plus empty-state-icon"></i>
-            <h4 class="empty-state-title">Proyectos en preparación</h4>
-            <p class="empty-state-text">
-              Estoy documentando mis proyectos para publicarlos aquí.
-              Mientras tanto puedes ver mi código en GitHub.
-            </p>
-            <div class="empty-state-actions">
-              <a href="${owner.github}" target="_blank" rel="noopener noreferrer" class="btn custom-btn">
-                <i class="bi bi-github me-2"></i>Ver mi GitHub
-              </a>
-            </div>
-          </div>
+        <div class="empty-state reveal">
+          <i class="bi bi-rulers empty-state-icon" aria-hidden="true"></i>
+          <h3 class="empty-state-title">Proyectos en preparación</h3>
+          <p class="empty-state-text">
+            Estoy documentando mis proyectos para publicarlos aquí.
+            Mientras tanto puedes ver mi código en GitHub.
+          </p>
+          <a href="${owner.github}" target="_blank" rel="noopener noreferrer" class="btn btn-primary-solid">
+            <i class="bi bi-github me-2"></i>Ver mi GitHub
+          </a>
         </div>`;
       return;
     }
 
     grid.innerHTML = renderList(visibles, (id) => {
       const p = projects[id];
+      const detail = `project-detail.html?id=${encodeURIComponent(id)}`;
+      const [back1, back2] = p.gallery || [];
+      const host = isExternal(p.demo) ? hostOf(p.demo) : 'código privado';
       return `
-        <div class="col-lg-4 col-md-6 col-12 mb-4 project-item" data-category="${esc(p.category || 'web')}">
-          <div class="project-card">
-            <div class="project-image-wrap">
-              <img src="${esc(p.mainImage)}" class="project-image img-fluid" alt="${esc(p.title)}"
-                   loading="lazy" decoding="async">
-              <div class="project-overlay">
-                <a href="project-detail.html?id=${id}" class="btn btn-project-detail">
-                  Ver Detalles <i class="bi bi-arrow-right ms-2"></i>
-                </a>
-              </div>
-            </div>
-            <div class="project-info">
-              <h4 class="project-title">${esc(p.title)}</h4>
-              <p class="project-brief">
-                ${p.brief}
-                ${isExternal(p.demo) ? `<br><strong><a href="${esc(p.demo)}" target="_blank" rel="noopener noreferrer">Ver demo</a></strong>` : ''}
-              </p>
-              <div class="project-tech-tags">
+        <article class="project-row reveal">
+          <div class="project-visual" data-tilt>
+            <a href="${detail}" class="shot-stack" aria-label="Ver detalles de ${esc(p.title)}">
+              ${back2 ? `<img class="shot shot-back shot-back-2" src="${esc(back2)}" alt="" loading="lazy" decoding="async">` : ''}
+              ${back1 ? `<img class="shot shot-back shot-back-1" src="${esc(back1)}" alt="" loading="lazy" decoding="async">` : ''}
+              <span class="shot shot-main">
+                <span class="browser-bar" aria-hidden="true"><i></i><i></i><i></i><span class="browser-url">${esc(host)}</span></span>
+                <img src="${esc(p.mainImage)}" alt="${esc(p.title)}" loading="lazy" decoding="async" width="1280" height="800">
+              </span>
+            </a>
+          </div>
+          <div class="project-spec">
+            <h3 class="project-title">${esc(p.title)}</h3>
+            <p class="project-brief">${p.brief}</p>
+            <dl class="spec-table">
+              <div><dt>Rol</dt><dd>${esc(p.role || '—')}</dd></div>
+              <div><dt>Fecha</dt><dd>${esc(p.date || '—')}</dd></div>
+              ${p.duration ? `<div><dt>Duración</dt><dd>${esc(p.duration)}</dd></div>` : ''}
+              <div class="spec-table-wide"><dt>Stack</dt><dd>
                 ${renderList(p.tags || p.tech || [], (t) => `<span class="tech-tag">${esc(t)}</span>`)}
-              </div>
+              </dd></div>
+            </dl>
+            <div class="project-actions">
+              <a href="${detail}" class="btn btn-primary-solid"><i class="bi bi-file-earmark-text me-2"></i>Ver detalles</a>
+              ${isExternal(p.demo) ? `<a href="${esc(p.demo)}" target="_blank" rel="noopener noreferrer" class="btn btn-ghost"><i class="bi bi-box-arrow-up-right me-2"></i>Ver demo</a>` : ''}
             </div>
           </div>
-        </div>`;
+        </article>`;
     });
 
     // No todos los proyectos tienen demo o capturas presentables; el resto vive
@@ -454,17 +474,12 @@
     const ctaBox = $('projectsGithubCta');
     if (ctaBox && isExternal(owner.github)) {
       ctaBox.innerHTML = `
-        <div class="github-cta">
-          <i class="bi bi-github github-cta-icon"></i>
-          <div class="github-cta-text">
-            <strong>Más proyectos de desarrollo en mi perfil de GitHub</strong>
-            <span>Aquí están los que puedo mostrar con demo y capturas. El resto del código,
-            incluidos los ejercicios y proyectos en curso, está en mi perfil.</span>
-          </div>
-          <a href="${esc(owner.github)}" target="_blank" rel="noopener noreferrer"
-             class="btn btn-outline-brand github-cta-btn">
-            Ver mi GitHub <i class="bi bi-arrow-right ms-2"></i>
-          </a>
+        <div class="note">
+          <i class="bi bi-github note-icon" aria-hidden="true"></i>
+          <p><strong>Más proyectos de desarrollo en mi perfil de GitHub.</strong>
+          Aquí están los que puedo mostrar con demo y capturas. El resto del código,
+          incluidos los ejercicios y proyectos en curso, está en mi perfil.
+          <a href="${esc(owner.github)}" target="_blank" rel="noopener noreferrer">Ver mi GitHub</a></p>
         </div>`;
     }
 
@@ -476,118 +491,119 @@
     }
   }
 
+  // Proyectos sin capturas ni demo pública: "lista de piezas" desplegable
+  // (interactions.js abre y cierra cada fila).
+  function renderOtherProjects() {
+    const box = $('otherProjects');
+    if (!box || !(otherProjects || []).length) return;
+    box.innerHTML = `
+      <h3 class="subsection-title">Más proyectos</h3>
+      <ul class="parts-list reveal" data-stagger>
+        ${renderList(otherProjects, (p, i) => `
+          <li class="part">
+            <button type="button" class="part-head" aria-expanded="false" aria-controls="part-${i}">
+              <i class="bi ${esc(p.icon || 'bi-code-slash')} part-icon" aria-hidden="true"></i>
+              <span class="part-name">${esc(p.title)}</span>
+              <span class="part-stack">${esc((p.tech || []).join(', '))}</span>
+              ${p.year ? `<span class="part-year">${esc(p.year)}</span>` : ''}
+              <i class="bi bi-plus-lg part-toggle" aria-hidden="true"></i>
+            </button>
+            <div class="part-body" id="part-${i}" hidden>
+              <p>${esc(p.description)}</p>
+              ${isExternal(p.github) ? `<a class="part-link" href="${esc(p.github)}" target="_blank" rel="noopener noreferrer"><i class="bi bi-github me-2"></i>Ver código</a>` : ''}
+            </div>
+          </li>`)}
+      </ul>`;
+  }
+
   function renderSkills() {
     const container = $('skillsContainer');
     if (!container) return;
 
-    let html = renderList(skills, (cat) => `
-      <div class="skill-category mb-5">
-        <h3 class="skill-category-title mb-4">
-          <i class="bi ${cat.icon} me-2"></i> ${cat.category}
+    const groups = renderList(skills, (cat) => `
+      <section class="skill-group reveal">
+        <h3 class="skill-group-title">
+          <i class="bi ${cat.icon}" aria-hidden="true"></i>${cat.category}
+          <span class="skill-group-count">${cat.items.length}</span>
         </h3>
-        <div class="row">
+        <ul class="skill-chips" data-stagger>
           ${renderList(cat.items, (s) => {
             const nivel = s.level || 'En práctica';
-            const slug = { 'Sólido': 'solido', 'En práctica': 'practica', 'Explorando': 'explorando' }[nivel] || 'practica';
+            const slug = LEVEL_SLUG[nivel] || 'practica';
             return `
-            <div class="col-xl-4 col-lg-6 col-12 mb-3">
-              <div class="skill-item skill-item--level">
-                <div class="skill-header">
-                  <div class="skill-icon-name">
-                    <i class="bi ${esc(s.icon)} skill-icon-bootstrap"></i>
-                    <h5 class="skill-name">${esc(s.name)}</h5>
-                  </div>
-                  <span class="skill-level skill-level--${slug}">${esc(nivel)}</span>
-                </div>
-              </div>
-            </div>`;
+            <li class="skill-chip" data-level="${slug}" title="${esc(nivel)}">
+              <i class="bi ${esc(s.icon)}" aria-hidden="true"></i>
+              <span class="skill-chip-name">${esc(s.name)}</span>
+              ${levelBars(slug)}<span class="visually-hidden">, nivel ${esc(nivel)}</span>
+            </li>`;
           })}
-        </div>
-      </div>`);
+        </ul>
+      </section>`);
 
-    html += `
-      <div class="skill-category">
-        <h3 class="skill-category-title mb-4">
-          <i class="bi bi-people me-2"></i> Habilidades Blandas
-        </h3>
-        <div class="row">
-          ${renderList(softSkills, (s) => `
-            <div class="col-lg-3 col-md-6 col-12 mb-4">
-              <div class="soft-skill-item text-center">
-                <div class="soft-skill-icon"><i class="bi ${s.icon}"></i></div>
-                <h5>${s.name}</h5>
-              </div>
-            </div>`)}
-        </div>
+    container.innerHTML = `
+      <div class="skill-groups">${groups}</div>
+      <div class="soft-skills reveal">
+        <h3 class="skill-group-title"><i class="bi bi-people" aria-hidden="true"></i>Habilidades Blandas</h3>
+        <ul class="soft-list" data-stagger>
+          ${renderList(softSkills, (s) => `<li><i class="bi ${s.icon}" aria-hidden="true"></i>${s.name}</li>`)}
+        </ul>
       </div>`;
-
-    container.innerHTML = html;
   }
 
   function renderEducation() {
     fill('educationTimeline', renderList(education, (ed) => `
-      <div class="timeline-item">
-        <div class="timeline-marker"></div>
-        <div class="timeline-content">
-          <span class="timeline-date"><i class="bi bi-calendar3 me-2"></i>${ed.date}</span>
-          <h4 class="timeline-title">${ed.title}</h4>
-          <p class="timeline-institution"><i class="bi bi-bank me-2"></i>${ed.institution}</p>
-          <p class="timeline-description">${ed.description}</p>
+      <li class="spec-row reveal">
+        <span class="spec-date">${ed.date}</span>
+        <div class="spec-main">
+          <h3 class="spec-title">${ed.title}</h3>
+          <p class="spec-org"><i class="bi bi-bank me-2" aria-hidden="true"></i>${ed.institution}</p>
         </div>
-      </div>`));
+        <p class="spec-desc">${ed.description}</p>
+      </li>`));
   }
 
-  // Tarjeta horizontal: sello a la izquierda, datos a la derecha. Con el
-  // formato anterior (todo centrado, una columna de tres) la sección se veía
-  // vacía cuando había pocos certificados.
+  // Cada certificado es un sello; si tiene enlace verificable, la tarjeta entera es el enlace.
   function renderCertificates() {
     fill('certificatesGrid', renderList(certificates, (c) => {
       const inner = `
-        <div class="certificate-icon"><i class="bi bi-patch-check-fill"></i></div>
-        <div class="certificate-body">
-          <h5 class="certificate-name">${esc(c.name)}</h5>
-          ${c.issuer ? `<p class="certificate-issuer">${esc(c.issuer)}</p>` : ''}
-          ${c.detail ? `<p class="certificate-detail">${esc(c.detail)}</p>` : ''}
-          ${c.date ? `<span class="certificate-date">${esc(c.date)}</span>` : ''}
-          ${isExternal(c.url) ? '<span class="certificate-link">Ver certificado <i class="bi bi-box-arrow-up-right"></i></span>' : ''}
-        </div>`;
-
-      // Si hay enlace verificable, la tarjeta entera es el enlace.
-      const card = isExternal(c.url)
-        ? `<a href="${esc(c.url)}" target="_blank" rel="noopener noreferrer" class="certificate-card certificate-card--link">${inner}</a>`
-        : `<div class="certificate-card">${inner}</div>`;
-
-      return `<div class="col-lg-6 col-12 mb-4">${card}</div>`;
+        <span class="cert-stamp" aria-hidden="true"><i class="bi bi-patch-check-fill"></i></span>
+        <span class="cert-body">
+          <span class="cert-name">${esc(c.name)}</span>
+          ${c.issuer ? `<span class="cert-issuer">${esc(c.issuer)}</span>` : ''}
+          ${c.detail ? `<span class="cert-detail">${esc(c.detail)}</span>` : ''}
+          ${c.date ? `<span class="cert-date">${esc(c.date)}</span>` : ''}
+          ${isExternal(c.url) ? '<span class="cert-link">Ver certificado <i class="bi bi-box-arrow-up-right"></i></span>' : ''}
+        </span>`;
+      return isExternal(c.url)
+        ? `<a href="${esc(c.url)}" target="_blank" rel="noopener noreferrer" class="cert-card cert-card--link">${inner}</a>`
+        : `<div class="cert-card">${inner}</div>`;
     }));
   }
 
   function renderContactInfo() {
+    // El número sale de owner.whatsapp (portfolio-data.js), nunca escrito a mano.
     fill('contactInfo', `
-  <div class="row text-center">
-    <div class="col-lg-4 col-12 mb-4">
-      <div class="contact-info-item">
-        <i class="bi bi-envelope-fill"></i>
-        <h5>Email</h5>
-        <a href="mailto:${owner.email}">${owner.email}</a>
-      </div>
-    </div>
-    <div class="col-lg-4 col-12 mb-4">
-      <div class="contact-info-item">
-        <i class="bi bi-whatsapp"></i>
-        <h5>WhatsApp</h5>
-        <!-- El número sale de owner.whatsapp (portfolio-data.js), ya no escrito a mano:
-             antes este enlace llevaba a un número distinto del que mostraba. -->
-        <a href="${owner.whatsapp}" target="_blank" rel="noopener noreferrer">${owner.phoneFormatted}</a>
-      </div>
-    </div>
-    <div class="col-lg-4 col-12 mb-4">
-      <div class="contact-info-item">
-        <i class="bi bi-geo-alt-fill"></i>
-        <h5>Ubicación</h5>
-        <p>${owner.location}</p>
-      </div>
-    </div>
-  </div>`);
+      <ul class="contact-list" data-stagger>
+        <li>
+          <i class="bi bi-envelope" aria-hidden="true"></i>
+          <div><span class="contact-label">Email</span>
+            <a href="mailto:${owner.email}">${owner.email}</a></div>
+          <button type="button" class="copy-btn" data-copy="${esc(owner.email)}" aria-label="Copiar correo">
+            <i class="bi bi-copy" aria-hidden="true"></i></button>
+        </li>
+        <li>
+          <i class="bi bi-whatsapp" aria-hidden="true"></i>
+          <div><span class="contact-label">WhatsApp</span>
+            <a href="${owner.whatsapp}" target="_blank" rel="noopener noreferrer">${owner.phoneFormatted}</a></div>
+          <button type="button" class="copy-btn" data-copy="${esc(owner.phoneFormatted)}" aria-label="Copiar número">
+            <i class="bi bi-copy" aria-hidden="true"></i></button>
+        </li>
+        <li>
+          <i class="bi bi-geo-alt" aria-hidden="true"></i>
+          <div><span class="contact-label">Ubicación</span>
+            <span>${owner.location}</span></div>
+        </li>
+      </ul>`);
   }
 
   // ========== LIGHTBOX (visor de capturas a pantalla completa) ==========
@@ -702,10 +718,10 @@
 
     let btns = '';
     // Solo se pinta el botón si el enlace es una URL real.
-    if (isExternal(p.github)) btns += `<a href="${esc(p.github)}" target="_blank" rel="noopener noreferrer" class="btn custom-btn me-2"><i class="bi bi-github me-2"></i>Ver Código</a>`;
+    if (isExternal(p.github)) btns += `<a href="${esc(p.github)}" target="_blank" rel="noopener noreferrer" class="btn btn-primary-solid me-2"><i class="bi bi-github me-2"></i>Ver Código</a>`;
     // btn-outline-light desaparecía en modo claro: ahora usa un estilo propio
     // que funciona en los dos temas.
-    if (isExternal(p.demo)) btns += `<a href="${esc(p.demo)}" target="_blank" rel="noopener noreferrer" class="btn btn-outline-brand"><i class="bi bi-box-arrow-up-right me-2"></i>Demo en Vivo</a>`;
+    if (isExternal(p.demo)) btns += `<a href="${esc(p.demo)}" target="_blank" rel="noopener noreferrer" class="btn btn-ghost"><i class="bi bi-box-arrow-up-right me-2"></i>Demo en Vivo</a>`;
     fill('projectLinksButtons', btns);
 
     let demoHtml = '';
@@ -765,7 +781,7 @@
       if (extraBox) extraBox.classList.remove('d-none');
       fill('projectExtraLinks', renderList(p.extraLinks, (l) =>
         // btn-outline-primary pintaba un azul de Bootstrap que no está en la paleta.
-        `<a href="${l.url}" target="_blank" rel="noopener noreferrer" class="btn btn-outline-brand"><i class="${l.icon} me-2"></i>${l.label}</a>`));
+        `<a href="${l.url}" target="_blank" rel="noopener noreferrer" class="btn btn-ghost"><i class="${l.icon} me-2"></i>${l.label}</a>`));
     }
 
     const team = p.team || [];
@@ -794,10 +810,11 @@
 
   // ========== INITIALIZATION ==========
   function initAll() {
-    fill('heroSocial', renderSocialIcons(socialLinks, true));
+    fill('heroSocial', renderSocialIcons(socialLinks));
     fill('siteFooter', renderFooter());
     renderExperience();
     renderProjectCards();
+    renderOtherProjects();
     renderSkills();
     renderEducation();
     renderCertificates();
@@ -809,12 +826,10 @@
     initSmoothScroll();
     initActiveNav();
     initStatsCounter();
-    initSkillBars();
     initContactForm();
     initTooltips();
     initProjectDetail();
 
-    console.log('🚀 Portfolio initialized');
   }
 
   if (document.readyState === 'loading') {

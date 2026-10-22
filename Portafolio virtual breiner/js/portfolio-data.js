@@ -1,11 +1,12 @@
 /* ============================================================================
    PORTFOLIO-DATA.JS — Todo el contenido del sitio se edita AQUÍ.
 
+   Actualizado el 22 oct 2026 para que coincida con la hoja de vida.
+
    PENDIENTES (búscalos como "PENDIENTE"):
      1. Duración de Anime Trivia y de El Hipster Barato  -> abajo, en `projects`
-     2. Añadir LinkedIn                                  -> `socialLinks`
-     3. Reemplazar SITE_URL en index.html                -> etiquetas Open Graph
-     4. Poner descripción a los repos en GitHub          -> se hace desde GitHub
+     2. Capturas de los proyectos de `otherProjects` si algún día quieres
+        pasarlos a tarjeta grande con ficha propia
    ============================================================================ */
 
 const PORTFOLIO = {
@@ -20,7 +21,7 @@ const PORTFOLIO = {
     owner: {
         name: 'Breiner Stiven Guisao Rodriguez',
         shortName: 'Breiner Guisao',
-        title: 'Tecnólogo en Análisis y Desarrollo de Software & Técnico en Mantenimiento de Sistemas',
+        title: 'Tecnólogo en Análisis y Desarrollo de Software & Técnico Laboral en Sistemas',
         email: 'rodriguezbreiner125@gmail.com',
         phone: '+573206554202',
         phoneFormatted: '+57 320 655 4202',
@@ -29,9 +30,7 @@ const PORTFOLIO = {
         // Un solo lugar para el WhatsApp: antes el número estaba escrito a mano en
         // main.js y en socialLinks, y ambos apuntaban a un número que no es el tuyo.
         whatsapp: 'https://wa.me/573206554202?text=%C2%A1Hola!%20Vi%20tu%20portafolio%20y%20me%20gustar%C3%ADa%20conocer%20m%C3%A1s%20sobre%20tus%20servicios.',
-        // PENDIENTE: LinkedIn. Es el canal donde te van a buscar los reclutadores;
-        // cuando tengas el perfil, añádelo también a socialLinks (abajo).
-        // linkedin: 'https://www.linkedin.com/in/tu-usuario',
+        linkedin: 'https://www.linkedin.com/in/breiner-stiven-guisao-rodriguez-434578345',
         photo: 'images/perfil.jpg',
     },
 
@@ -40,23 +39,19 @@ const PORTFOLIO = {
         { url: 'mailto:rodriguezbreiner125@gmail.com', icon: 'bi-envelope', label: 'Email' },
         // Corregido: antes apuntaba a 573205703024, que no es tu número.
         { url: 'https://wa.me/573206554202?text=%C2%A1Hola!%20Vi%20tu%20portafolio%20y%20me%20gustar%C3%ADa%20conocer%20m%C3%A1s%20sobre%20tus%20servicios.', icon: 'bi-whatsapp', label: 'WhatsApp' },
-        // PENDIENTE: descomentar cuando tengas el perfil de LinkedIn.
-        // { url: 'https://www.linkedin.com/in/tu-usuario', icon: 'bi-linkedin', label: 'LinkedIn' },
+        { url: 'https://www.linkedin.com/in/breiner-stiven-guisao-rodriguez-434578345', icon: 'bi-linkedin', label: 'LinkedIn' },
     ],
 
     experience: [
         {
             date: 'Diciembre 2025 - Junio 2026',
-            title: 'Técnico de Soporte en Telecomunicaciones',
+            title: 'Técnico de Soporte en empresa de telecomunicaciones',
             company: 'TuCable SAS, Pereira',
             tasks: [
-                'Atención, diagnóstico y resolución de incidentes técnicos en servicios de internet y televisión.',
-                'Configuración y actualización de equipos de red y dispositivos tecnológicos.',
-                'Parametrización y verificación del correcto funcionamiento de servicios en usuarios finales.',
-                'Soporte técnico remoto según requerimientos del servicio.',
-                'Monitoreo y validación del rendimiento operativo de los sistemas.',
-                'Detección y reporte de fallas técnicas para su escalamiento oportuno.',
-                'Garantía de continuidad y calidad en la prestación del servicio.',
+                'Atención, diagnóstico y resolución de incidentes técnicos de los servicios de internet y televisión.',
+                'Configuración, actualización y parametrización de equipos de red y dispositivos tecnológicos.',
+                'Soporte técnico remoto, orientación a usuarios y monitoreo del funcionamiento operativo de los sistemas.',
+                'Detección, diagnóstico y reporte de fallas técnicas, con seguimiento de cada caso hasta su solución o escalamiento.',
             ],
         },
         {
@@ -65,12 +60,10 @@ const PORTFOLIO = {
             company: 'Comfamiliar Risaralda, Pereira',
             tasks: [
                 'Mantenimiento preventivo y correctivo de equipos informáticos.',
-                'Ensamblaje, instalación y configuración de hardware.',
+                'Ensamblaje, instalación y configuración de componentes de hardware.',
                 'Desmontaje, transporte y almacenamiento de equipos obsoletos.',
-                'Gestión de inventarios tecnológicos.',
-                'Participación en proyectos de renovación tecnológica.',
-                'Atención al cliente, resolución de consultas y orientación a los usuarios.',
-                'Gestión eficiente en un entorno de alta demanda.',
+                'Gestión y control de inventarios tecnológicos, y participación en proyectos de renovación tecnológica.',
+                'Atención y resolución de requerimientos técnicos, y orientación a los usuarios frente a consultas sobre equipos y servicios.',
             ],
         },
     ],
@@ -83,7 +76,7 @@ const PORTFOLIO = {
             title: 'Sistema de Registro de Entrada y Salida Escolar',
             subtitle: 'WebApp para control de acceso escolar con panel admin, roles y reportes.',
             brief: 'Controla entradas y salidas en colegio, roles, reportes y panel admin.',
-            date: 'Marzo 2026',
+            date: '2025',
             role: 'Fullstack JS',
             duration: '3 meses',
             category: 'web',
@@ -145,14 +138,15 @@ const PORTFOLIO = {
 
         anime_trivia: {
             title: 'Anime Trivia',
-            subtitle: 'Juego de trivia con preguntas generadas por IA, modo supervivencia y ranking por categoría.',
+            subtitle: 'Trivia en modo supervivencia con preguntas generadas por IA, revisión humana y ranking por categoría.',
             brief: 'Trivia contra reloj con 3 vidas, dificultad creciente, ranking y preguntas generadas con Gemini.',
             date: 'Agosto 2026',
             role: 'Fullstack Developer',
             duration: '',                      // PENDIENTE: cuánto te tomó (ej: '1 mes')
             category: 'web',
             github: 'https://github.com/Breiner1412/Pregunta2',
-            demo: 'https://trivia-h7a2.onrender.com',
+            // URL confirmada por Breiner (22 oct 2026).
+            demo: 'https://pregunta2-uppg.onrender.com',
             mainImage: 'images/projects/anime-trivia/portada.jpg',
             gallery: [
                 'images/projects/anime-trivia/categorias.jpg',
@@ -160,18 +154,18 @@ const PORTFOLIO = {
                 'images/projects/anime-trivia/respuesta.jpg',
                 'images/projects/anime-trivia/movil.jpg',
             ],
-            tech: ['Next.js 16', 'TypeScript', 'Tailwind CSS', 'Supabase', 'Gemini API'],
+            tech: ['Next.js 16', 'TypeScript', 'Tailwind CSS v4', 'Supabase', 'Gemini API'],
             tools: ['VS Code', 'Git', 'Render'],
             tags: ['Next.js', 'TypeScript', 'Supabase', 'IA'],
             stats: [
                 { label: 'Modo de juego', value: 'Supervivencia: 3 vidas, 15 s por pregunta' },
-                { label: 'Categorías', value: '8 temas + modo mezclado' },
-                { label: 'Preguntas', value: 'Generadas con IA desde el panel admin' },
+                { label: 'Categorías', value: '9 categorías' },
+                { label: 'Preguntas', value: 'Generadas con IA y revisadas antes de publicarse' },
             ],
             description: `
-        <p>Anime Trivia es un juego de preguntas que empezó como una trivia de anime y creció a ocho
-        categorías: cultura general, ciencia, deportes, música, anime y manga, películas, cómics y series,
-        más un modo mezclado. El banco de preguntas no se escribe a mano: desde el panel de administración
+        <p>Anime Trivia es un juego de preguntas que empezó como una trivia de anime y creció a nueve
+        categorías, entre ellas cultura general, ciencia, deportes, música, películas, cómics y series.
+        El banco de preguntas no se escribe a mano: desde el panel de administración
         se generan preguntas nuevas con la API de Gemini, así que el juego no se queda sin contenido.</p>
         <h4 class="mt-4 mb-3">Cómo se juega</h4>
         <p>Eliges una categoría y respondes contra reloj: 15 segundos por pregunta y 3 vidas. La partida
@@ -182,18 +176,21 @@ const PORTFOLIO = {
         <ul class="project-features-list">
           <li><i class="bi bi-check-circle-fill me-2"></i>Modo supervivencia con temporizador y sistema de vidas</li>
           <li><i class="bi bi-check-circle-fill me-2"></i>Dificultad progresiva durante la partida</li>
-          <li><i class="bi bi-check-circle-fill me-2"></i>Ranking de jugadores por categoría</li>
+          <li><i class="bi bi-check-circle-fill me-2"></i>Tablas de posiciones por categoría</li>
           <li><i class="bi bi-check-circle-fill me-2"></i>Registro e inicio de sesión con Supabase Auth</li>
-          <li><i class="bi bi-check-circle-fill me-2"></i>Panel de administración que genera preguntas con IA (Gemini)</li>
+          <li><i class="bi bi-check-circle-fill me-2"></i>Panel de administración que genera preguntas con IA (Gemini) y las deja en revisión antes de publicarlas</li>
+          <li><i class="bi bi-check-circle-fill me-2"></i>Validación del lado del servidor: el navegador nunca conoce la respuesta correcta ni calcula su propio puntaje</li>
           <li><i class="bi bi-check-circle-fill me-2"></i>Diseño responsive, pensado para jugar desde el celular</li>
         </ul>
         <h4 class="mt-4 mb-3">Desafíos y Soluciones</h4>
         <p>El reto principal fue que las preguntas generadas por IA llegaran con un formato confiable:
         cuatro opciones, una sola correcta y un nivel de dificultad asignado, para poder guardarlas
-        directamente en la base de datos y servirlas en orden de dificultad durante la partida.</p>
+        directamente en la base de datos y servirlas en orden de dificultad durante la partida.
+        El segundo fue que no se pudiera hacer trampa: la respuesta correcta y el puntaje se
+        calculan en el servidor, así que abrir las herramientas del navegador no revela nada.</p>
         <h4 class="mt-4 mb-3">Resultados</h4>
         <p>Un juego completo y desplegado, con banco de preguntas que se amplía desde el panel sin tocar
-        código, y ranking persistente en Supabase.</p>
+        código, y tablas de posiciones persistentes en Supabase.</p>
       `,
             team: [
                 {
@@ -206,7 +203,7 @@ const PORTFOLIO = {
                 },
             ],
             extraLinks: [
-                { url: 'https://trivia-h7a2.onrender.com', label: 'Jugar ahora', icon: 'bi bi-controller' },
+                { url: 'https://pregunta2-uppg.onrender.com', label: 'Jugar ahora', icon: 'bi bi-controller' },
             ],
             demoAccess: [],
         },
@@ -335,6 +332,44 @@ const PORTFOLIO = {
     // Ids de `projects` que se muestran como tarjetas, en este orden.
     projectCards: ['anime_trivia', 'hipster_barato', 'registro'],
 
+    // Proyectos sin capturas ni demo pública: salen debajo de las tarjetas como
+    // una lista compacta, con su stack y el enlace al repositorio. Si uno de
+    // ellos consigue capturas y demo, muévelo a `projects` como los de arriba.
+    otherProjects: [
+        {
+            title: 'FEV-Core — API de facturación electrónica',
+            year: '2026',
+            icon: 'bi-receipt',
+            tech: ['.NET', 'C#'],
+            description: 'API para emitir facturas electrónicas y notas crédito y débito bajo el modelo de la DIAN, con emisión asíncrona y autenticación por llave de API. Construida por etapas, con levantamiento de requerimientos y documentación técnica.',
+            github: 'https://github.com/Breiner1412/FEV-Core',
+        },
+        {
+            title: 'Sistema de gestión para granjas avícolas',
+            year: '2026',
+            icon: 'bi-egg',
+            tech: ['Next.js', 'TypeScript', 'Tailwind CSS', 'Docker'],
+            description: 'Plataforma para varias fincas que cubre producción, bodegas, vacunación y ventas, con roles diferenciados y registro auditable de cada operación.',
+            github: 'https://github.com/Breiner1412/avicola',
+        },
+        {
+            title: 'Sistema de Gestión Técnica Integral',
+            year: '2026',
+            icon: 'bi-headset',
+            tech: ['Laravel', 'Livewire', 'MySQL'],
+            description: 'Mesa de soporte para un proveedor de internet: bandeja de casos con semáforo de SLA, alertas por correo, informe mensual por técnico y pantalla de campo que funciona sin conexión.',
+            github: 'https://github.com/Breiner1412/sistema-de-gestion-tecnica',
+        },
+        {
+            title: 'Servidor Linux propio',
+            year: '2026',
+            icon: 'bi-hdd-rack',
+            tech: ['Debian', 'SSH', 'Tailscale'],
+            description: 'Servidor montado sobre un portátil reacondicionado (cambio a SSD y ampliación de RAM), con Debian en modo servidor y acceso remoto seguro, donde despliego y pruebo mis proyectos.',
+            github: '',
+        },
+    ],
+
     // 'level' se muestra como texto: Sólido / En práctica / Explorando.
     // Es más creíble que un porcentaje autoasignado — "Azure 45%" comunicaba un
     // techo, no una capacidad, y nadie puede verificarlo.
@@ -343,12 +378,13 @@ const PORTFOLIO = {
             category: 'Lenguajes de Programación',
             icon: 'bi-code-square',
             items: [
-                { name: 'JavaScript', icon: 'bi-filetype-js', level: 'Sólido' },
+                { name: 'JavaScript', icon: 'bi-filetype-js', level: 'En práctica' },
                 { name: 'TypeScript', icon: 'bi-filetype-tsx', level: 'En práctica' },
                 { name: 'PHP', icon: 'bi-filetype-php', level: 'En práctica' },
-                { name: 'Python', icon: 'bi-filetype-py', level: 'En práctica' },
                 { name: 'HTML5 & CSS3', icon: 'bi-filetype-html', level: 'Sólido' },
-                { name: 'SQL', icon: 'bi-database', level: 'Sólido' },
+                { name: 'SQL', icon: 'bi-database', level: 'En práctica' },
+                { name: 'C#', icon: 'bi-hash', level: 'Explorando' },
+                { name: 'Python', icon: 'bi-filetype-py', level: 'Explorando' },
             ],
         },
         {
@@ -358,8 +394,9 @@ const PORTFOLIO = {
                 { name: 'Next.js', icon: 'bi-triangle', level: 'En práctica' },
                 { name: 'React', icon: 'bi-code-slash', level: 'En práctica' },
                 { name: 'Laravel & Livewire', icon: 'bi-braces', level: 'En práctica' },
-                { name: 'FastAPI', icon: 'bi-lightning-charge', level: 'En práctica' },
-                { name: 'Tailwind CSS', icon: 'bi-wind', level: 'En práctica' },
+                { name: 'Tailwind CSS', icon: 'bi-wind', level: 'Sólido' },
+                { name: '.NET', icon: 'bi-box', level: 'Explorando' },
+                { name: 'FastAPI', icon: 'bi-lightning-charge', level: 'Explorando' },
                 { name: 'Bootstrap', icon: 'bi-bootstrap', level: 'Sólido' },
             ],
         },
@@ -381,7 +418,9 @@ const PORTFOLIO = {
                 { name: 'Git & GitHub', icon: 'bi-git', level: 'Sólido' },
                 { name: 'Vercel', icon: 'bi-rocket-takeoff', level: 'En práctica' },
                 { name: 'Render', icon: 'bi-cloud-arrow-up', level: 'En práctica' },
-                { name: 'Microsoft Azure (Básico)', icon: 'bi-cloud', level: 'Explorando' },
+                { name: 'Docker', icon: 'bi-box-seam', level: 'Explorando' },
+                { name: 'Servidores Linux (Debian, SSH)', icon: 'bi-terminal', level: 'Explorando' },
+                { name: 'Microsoft Azure', icon: 'bi-cloud', level: 'Explorando' },
                 // Aún no lo has usado en un proyecto: si prefieres no mostrarlo
                 // hasta entonces, borra esta línea.
                 { name: 'WordPress', icon: 'bi-wordpress', level: 'Explorando' },
@@ -392,7 +431,7 @@ const PORTFOLIO = {
             icon: 'bi-cpu',
             items: [
                 { name: 'Ensamblaje y mantenimiento de PCs', icon: 'bi-pc-display', level: 'Sólido' },
-                { name: 'Redes y configuración de equipos', icon: 'bi-hdd-network', level: 'Sólido' },
+                { name: 'Redes de datos y configuración de equipos', icon: 'bi-hdd-network', level: 'En práctica' },
                 { name: 'Diagnóstico de fallas', icon: 'bi-wrench', level: 'Sólido' },
                 { name: 'Instalación de software y SO', icon: 'bi-download', level: 'Sólido' },
                 { name: 'Windows & Linux', icon: 'bi-windows', level: 'Sólido' },
@@ -403,14 +442,12 @@ const PORTFOLIO = {
     ],
 
     softSkills: [
-        { name: 'Comunicación', icon: 'bi-chat-dots' },
-        { name: 'Trabajo en Equipo', icon: 'bi-people-fill' },
         { name: 'Resolución de Problemas', icon: 'bi-lightbulb' },
-        { name: 'Empatía', icon: 'bi-heart' },
+        { name: 'Capacidad de Análisis', icon: 'bi-graph-up' },
+        { name: 'Autoaprendizaje y Adaptación', icon: 'bi-arrow-repeat' },
         { name: 'Organización', icon: 'bi-kanban' },
-        { name: 'Adaptabilidad', icon: 'bi-arrow-repeat' },
-        { name: 'Atención al Cliente', icon: 'bi-headset' },
-        { name: 'Trabajo Bajo Presión', icon: 'bi-speedometer2' },
+        { name: 'Comunicación', icon: 'bi-chat-dots' },
+        { name: 'Empatía', icon: 'bi-heart' },
     ],
 
     education: [
@@ -418,13 +455,13 @@ const PORTFOLIO = {
             date: 'Abril 2024 - Junio 2026',
             title: 'Tecnólogo en Análisis y Desarrollo de Software',
             institution: 'SENA - Centro de Atención Sector Agropecuario, Pereira Risaralda',
-            description: 'Conocimientos en desarrollo web y backend con JavaScript, PHP, Python, Laravel, React y FastAPI; manejo de bases de datos SQL; control de versiones con Git y GitHub; diseño y maquetación con HTML, CSS y Bootstrap; despliegue y administración básica de servidores (incluyendo Microsoft Azure); programación básica en Arduino IDE; manejo de Linux y Windows y herramientas de ofimática.',
+            description: 'Desarrollo web y backend con JavaScript, PHP, Python, Laravel, React y FastAPI; bases de datos SQL; control de versiones con Git y GitHub; maquetación con HTML, CSS y Bootstrap. Despliegue y administración básica de servidores, incluido Microsoft Azure; Arduino IDE; Linux, Windows y ofimática.',
         },
         {
             date: 'Junio 2022 - Diciembre 2024',
-            title: 'Técnico Laboral en Mantenimiento de Sistemas',
+            title: 'Técnico Laboral en Sistemas',
             institution: 'Instituto Comfamiliar Risaralda, Pereira Risaralda',
-            description: 'Aprendizaje en mantenimiento preventivo y correctivo de equipos informáticos, instalación de software, diagnóstico y solución de problemas técnicos básicos. Capacitación en herramientas ofimáticas y sistemas operativos.',
+            description: 'Mantenimiento preventivo y correctivo de equipos, instalación de software, diagnóstico de problemas técnicos, herramientas ofimáticas y sistemas operativos.',
         },
         {
             date: 'Febrero 2016 - Diciembre 2021',
@@ -448,7 +485,7 @@ const PORTFOLIO = {
         {
             name: 'Técnico en Redes de Datos',
             issuer: 'Capacítate para el Empleo — Fundación Carlos Slim',
-            date: 'Marzo 2023 · 61 horas',
+            date: 'Marzo 2023 · 61 horas · calificación 9.64/10',
             detail: 'Instalación y configuración de redes cableadas e inalámbricas.',
             url: '',
         },
@@ -457,20 +494,6 @@ const PORTFOLIO = {
             issuer: '',
             date: '',
             detail: 'Ensamblaje, configuración y reparación de hardware, instalación de sistemas operativos y optimización de equipos.',
-            url: '',
-        },
-        {
-            name: 'Técnico Laboral en Sistemas',
-            issuer: 'Instituto Comfamiliar Risaralda',
-            date: '2022 - 2024',
-            detail: '',
-            url: '',
-        },
-        {
-            name: 'Tecnólogo en Análisis y Desarrollo de Software',
-            issuer: 'SENA',
-            date: '2024 - 2026',
-            detail: '',
             url: '',
         },
     ],

@@ -73,10 +73,27 @@
         themeToggles.forEach((btn) => btn.addEventListener('click', toggleTheme));
     }
 
+    const prefersReducedMotion = () =>
+        window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
     function toggleTheme() {
         const next = body.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
-        setTheme(next);
-        localStorage.setItem('theme', next);
+        const apply = () => {
+            setTheme(next);
+            localStorage.setItem('theme', next);
+        };
+        // Fundido entre temas donde el navegador lo soporta; si no, cambio directo.
+        if (document.startViewTransition && !prefersReducedMotion()) {
+            document.startViewTransition(apply);
+        } else {
+            apply();
+        }
+        if (!prefersReducedMotion()) {
+            themeToggles.forEach((btn) => btn.querySelector('i')?.animate(
+                [{ transform: 'rotate(-90deg) scale(.6)', opacity: 0 }, { transform: 'none', opacity: 1 }],
+                { duration: 300, easing: 'cubic-bezier(.16, 1, .3, 1)' }
+            ));
+        }
     }
 
     function setTheme(theme) {
@@ -93,6 +110,10 @@
         if (!navbar) return;
         onScroll(() => {
             navbar.classList.toggle('navbar-scrolled', window.scrollY > 100);
+            // Progreso de lectura (0 a 1) para la barra morada bajo el navbar.
+            const max = document.documentElement.scrollHeight - window.innerHeight;
+            const progress = max > 0 ? Math.min(window.scrollY / max, 1) : 0;
+            navbar.style.setProperty('--scroll', progress.toFixed(4));
         });
     }
 
@@ -166,7 +187,7 @@
         const DURACION = 1200;
         observe('.stat-number', (el) => {
             const target = parseInt(el.dataset.count, 10) || 0;
-            if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+            if (prefersReducedMotion()) {
                 el.textContent = target;
                 return;
             }
@@ -180,13 +201,21 @@
         });
     }
 
-    // ========== SKILL BARS ==========
-    function initSkillBars() {
-        observe('.skill-progress .progress-bar', (bar) => {
-            setTimeout(() => {
-                bar.style.width = bar.dataset.width;
-            }, 100);
+    // ========== REVEAL AL HACER SCROLL ==========
+    // Solo los bloques grandes aparecen una vez; el CSS desactiva el efecto con
+    // prefers-reduced-motion, y sin IntersectionObserver todo queda visible.
+    function initReveal() {
+        // Cada hijo de un [data-stagger] recibe su posición para el retraso en cascada.
+        document.querySelectorAll('[data-stagger]').forEach((list) => {
+            Array.from(list.children).forEach((child, i) => child.style.setProperty('--i', i));
         });
+        const els = document.querySelectorAll('.reveal');
+        if (!('IntersectionObserver' in window)) {
+            els.forEach((el) => el.classList.add('is-visible'));
+            return;
+        }
+        body.classList.add('reveal-ready');
+        observe('.reveal', (el) => el.classList.add('is-visible'), { threshold: 0.12 });
     }
 
     // ========== NOTIFICATIONS (contacto) ==========
@@ -301,41 +330,32 @@
 
     // ========== RENDERERS ==========
 
-    function renderSocialIcons(linksArr, withLabel = false) {
+    function renderSocialIcons(linksArr) {
         const items = renderList(
             linksArr,
             (s) => `
-      <li class="social-icon-item">
+      <li>
         <a href="${s.url}" ${s.url.startsWith('mailto') || s.url.startsWith('tel') ? '' : 'target="_blank" rel="noopener noreferrer"'
                 }
-           class="social-icon-link" aria-label="${s.label}">
-          <span class="${s.icon}"></span>
+           class="social-icon-link" aria-label="${s.label}" title="${s.label}">
+          <i class="bi ${s.icon}" aria-hidden="true"></i>
         </a>
       </li>`
         );
-        return `<ul class="social-icon d-flex align-items-center justify-content-center">
-      ${withLabel ? '<span class="text-white me-3">Sígueme:</span>' : ''}${items}</ul>`;
+        return `<ul class="social-icon">${items}</ul>`;
     }
 
     function renderFooter() {
         return `
-      <div class="container">
-        <div class="row">
-          <div class="col-lg-6 col-12 text-center text-lg-start mb-4">
-            <h4 class="text-white mb-3">${owner.name}</h4>
-            <p class="text-white-50">${owner.title}</p>
-          </div>
-          <div class="col-lg-6 col-12 d-flex justify-content-center justify-content-lg-end align-items-center">
-            ${renderSocialIcons(socialLinks.slice(0, 3))}
-          </div>
+      <div class="container footer-row">
+        <div>
+          <p class="footer-name">${owner.name}</p>
+          <p class="footer-meta">${owner.title}</p>
         </div>
-        <div class="row mt-5">
-          <div class="col-12 text-center">
-            <p class="copyright-text text-white-50">
-              © ${new Date().getFullYear()} ${owner.name}. Todos los derechos reservados.
-            </p>
-          </div>
-        </div>
+        ${renderSocialIcons(socialLinks.slice(0, 3))}
+        <p class="footer-meta footer-copy">
+          © ${new Date().getFullYear()} ${owner.name}. Todos los derechos reservados.
+        </p>
       </div>`;
     }
 
@@ -343,13 +363,14 @@
         const nav = $('detailNavbar');
         if (!nav) return;
         nav.innerHTML = `
+      <div class="scroll-progress" aria-hidden="true"></div>
       <div class="container">
         <a class="navbar-brand" href="index.html">${owner.shortName}</a>
         <button class="btn btn-theme-toggle d-lg-none ms-auto me-3" id="themeToggle" aria-label="Cambiar tema">
           <i class="bi bi-moon-stars-fill"></i>
         </button>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-          <span class="navbar-toggler-icon"></span>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Abrir menú">
+          <i class="bi bi-list"></i>
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
           <ul class="navbar-nav align-items-lg-center ms-auto me-lg-3">
@@ -360,7 +381,7 @@
           <button class="btn btn-theme-toggle d-none d-lg-block me-3" id="themeToggleDesktop" aria-label="Cambiar tema">
             <i class="bi bi-moon-stars-fill"></i>
           </button>
-          <a href="index.html#projects" class="btn custom-btn d-lg-block d-none">
+          <a href="index.html#projects" class="btn btn-ghost d-lg-block d-none">
             <i class="bi bi-arrow-left me-2"></i>Volver
           </a>
         </div>
@@ -376,23 +397,25 @@
         setTheme(localStorage.getItem('theme') || 'dark');
     }
 
+    // Cada empleo es una carpeta: la pestaña lleva las fechas, el cuerpo el cargo y las tareas.
     function renderExperience() {
         fill(
             'experienceTimeline',
             renderList(
                 experience,
                 (exp) => `
-      <div class="timeline-item">
-        <div class="timeline-marker"></div>
-        <div class="timeline-content">
-          <span class="timeline-date"><i class="bi bi-calendar3 me-2"></i>${exp.date}</span>
-          <h4 class="timeline-title">${exp.title}</h4>
-          <p class="timeline-institution"><i class="bi bi-building me-2"></i>${exp.company}</p>
-          <ul class="timeline-responsibilities">
+      <article class="folder reveal">
+        <span class="folder-tab">${exp.date}</span>
+        <div class="folder-body">
+          <header class="folder-head">
+            <h3 class="folder-title">${exp.title}</h3>
+            <p class="folder-org"><i class="bi bi-building me-2" aria-hidden="true"></i>${exp.company}</p>
+          </header>
+          <ul class="folder-tasks" data-stagger>
             ${renderList(exp.tasks, (t) => `<li>${t}</li>`)}
           </ul>
         </div>
-      </div>`
+      </article>`
             )
         );
     }
@@ -406,22 +429,30 @@
 
         // Estado vacío: mejor un mensaje honesto que una sección en blanco.
         if (!visibles.length) {
+            // Se dibuja como una carpeta abierta y vacía, coherente con el resto del sitio.
             grid.innerHTML = `
-        <div class="col-lg-8 col-12 mx-auto">
-          <div class="empty-state text-center">
-            <i class="bi bi-folder-plus empty-state-icon"></i>
-            <h4 class="empty-state-title">Proyectos en preparación</h4>
-            <p class="empty-state-text">
-              Estoy documentando mis proyectos para publicarlos aquí.
-              Mientras tanto puedes ver mi código en GitHub o escribirme directamente.
-            </p>
-            <div class="empty-state-actions">
-              <a href="${owner.github}" target="_blank" rel="noopener noreferrer" class="btn custom-btn">
-                <i class="bi bi-github me-2"></i>Ver mi GitHub
-              </a>
-              <a href="#contact" class="btn btn-outline-soft smoothscroll">
-                <i class="bi bi-chat-dots me-2"></i>Contactarme
-              </a>
+        <div class="col-12">
+          <div class="empty-folder reveal">
+            <span class="folder-tab">Proyectos</span>
+            <div class="empty-folder-body">
+              <div class="empty-folder-sheets" aria-hidden="true">
+                <span></span><span></span><span></span>
+              </div>
+              <div class="empty-folder-text">
+                <h3 class="empty-state-title">Proyectos en preparación</h3>
+                <p class="empty-state-text">
+                  Estoy documentando mis proyectos para publicarlos aquí.
+                  Mientras tanto puedes ver mi código en GitHub o escribirme directamente.
+                </p>
+                <div class="empty-state-actions">
+                  <a href="${owner.github}" target="_blank" rel="noopener noreferrer" class="btn btn-primary-solid">
+                    <i class="bi bi-github me-2"></i>Ver mi GitHub
+                  </a>
+                  <a href="#contact" class="btn btn-ghost smoothscroll">
+                    <i class="bi bi-chat-dots me-2"></i>Contactarme
+                  </a>
+                </div>
+              </div>
             </div>
           </div>
         </div>`;
@@ -432,7 +463,7 @@
             const p = projects[id];
             const demoExterna = isExternal(p.demo);
             return `
-        <div class="col-lg-4 col-md-6 col-12 mb-4 project-item" data-category="${esc(p.category || 'web')}">
+        <div class="col-lg-4 col-md-6 col-12 mb-4 project-item reveal" data-category="${esc(p.category || 'web')}">
           <div class="project-card">
             <div class="project-image-wrap">
               <img src="${esc(p.mainImage)}" class="project-image img-fluid" alt="${esc(p.title)}"
@@ -458,60 +489,40 @@
         });
     }
 
+    // Índice de habilidades: una columna por categoría, sin barras de porcentaje
+    // (el campo `pct` sigue en portfolio-data.js por si se quiere volver a usar).
     function renderSkills() {
         const container = $('skillsContainer');
         if (!container) return;
 
-        let html = renderList(
+        const technical = renderList(
             skills,
             (cat) => `
-      <div class="skill-category mb-5">
-        <h3 class="skill-category-title mb-4">
-          <i class="bi ${cat.icon} me-2"></i> ${cat.category}
+      <section class="skill-index reveal">
+        <h3 class="skill-index-title">
+          <i class="bi ${cat.icon}" aria-hidden="true"></i>${cat.category}
+          <span class="skill-index-count">${cat.items.length}</span>
         </h3>
-        <div class="row">
+        <ul class="skill-index-list" data-stagger>
           ${renderList(
                 cat.items,
-                (s) => `
-            <div class="col-lg-6 col-12 mb-4">
-              <div class="skill-item">
-                <div class="skill-header">
-                  <div class="skill-icon-name">
-                    <i class="bi ${s.icon} skill-icon-bootstrap"></i>
-                    <h5 class="skill-name">${s.name}</h5>
-                  </div>
-                  <span class="skill-percentage">${s.pct}%</span>
-                </div>
-                <div class="progress skill-progress">
-                  <div class="progress-bar" role="progressbar" style="width:0%" data-width="${s.pct}%"></div>
-                </div>
-              </div>
-            </div>`
+                (s) => `<li><i class="bi ${s.icon}" aria-hidden="true"></i>${s.name}</li>`
             )}
-        </div>
-      </div>`
+        </ul>
+      </section>`
         );
 
-        html += `
-      <div class="skill-category">
-        <h3 class="skill-category-title mb-4">
-          <i class="bi bi-people me-2"></i> Habilidades Blandas
-        </h3>
-        <div class="row">
+        container.innerHTML = `
+      <div class="skill-index-grid">${technical}</div>
+      <div class="soft-skills reveal">
+        <h3 class="skill-index-title"><i class="bi bi-people" aria-hidden="true"></i>Habilidades Blandas</h3>
+        <ul class="chip-list" data-stagger>
           ${renderList(
             softSkills,
-            (s) => `
-            <div class="col-lg-3 col-md-6 col-12 mb-4">
-              <div class="soft-skill-item text-center">
-                <div class="soft-skill-icon"><i class="bi ${s.icon}"></i></div>
-                <h5>${s.name}</h5>
-              </div>
-            </div>`
+            (s) => `<li class="chip"><i class="bi ${s.icon}" aria-hidden="true"></i>${s.name}</li>`
         )}
-        </div>
+        </ul>
       </div>`;
-
-        container.innerHTML = html;
     }
 
     function renderEducation() {
@@ -520,15 +531,14 @@
             renderList(
                 education,
                 (ed) => `
-      <div class="timeline-item">
-        <div class="timeline-marker"></div>
-        <div class="timeline-content">
-          <span class="timeline-date"><i class="bi bi-calendar3 me-2"></i>${ed.date}</span>
-          <h4 class="timeline-title">${ed.title}</h4>
-          <p class="timeline-institution"><i class="bi bi-bank me-2"></i>${ed.institution}</p>
-          <p class="timeline-description">${ed.description}</p>
+      <li class="dated-item reveal">
+        <span class="dated-date">${ed.date}</span>
+        <div>
+          <h3 class="dated-title">${ed.title}</h3>
+          <p class="dated-org">${ed.institution}</p>
+          <p class="dated-desc">${ed.description}</p>
         </div>
-      </div>`
+      </li>`
             )
         );
     }
@@ -539,14 +549,13 @@
             renderList(
                 certificates,
                 (c) => `
-      <div class="col-lg-4 col-md-6 col-12 mb-4">
-        <div class="certificate-card">
-          <div class="certificate-icon"><i class="bi bi-patch-check-fill"></i></div>
-          <h5 class="certificate-name">${c.name}</h5>
-          <p class="certificate-issuer">${c.issuer}</p>
-          ${c.date ? `<span class="certificate-date">${c.date}</span>` : ''}
+      <li class="cert-item">
+        <i class="bi bi-patch-check-fill" aria-hidden="true"></i>
+        <div>
+          <span class="cert-name">${c.name}</span>
+          <span class="cert-meta">${c.issuer}${c.date ? `, ${c.date}` : ''}</span>
         </div>
-      </div>`
+      </li>`
             )
         );
     }
@@ -555,29 +564,23 @@
         fill(
             'contactInfo',
             `
-      <div class="row text-center">
-        <div class="col-lg-4 col-12 mb-4">
-          <div class="contact-info-item">
-            <i class="bi bi-envelope-fill"></i>
-            <h5>Email</h5>
-            <a href="mailto:${owner.email}">${owner.email}</a>
-          </div>
-        </div>
-        <div class="col-lg-4 col-12 mb-4">
-          <div class="contact-info-item">
-            <i class="bi bi-whatsapp"></i>
-            <h5>WhatsApp</h5>
-            <a href="${owner.whatsapp}" target="_blank" rel="noopener noreferrer">${owner.phoneFormatted}</a>
-          </div>
-        </div>
-        <div class="col-lg-4 col-12 mb-4">
-          <div class="contact-info-item">
-            <i class="bi bi-geo-alt-fill"></i>
-            <h5>Ubicación</h5>
-            <p>${owner.location}</p>
-          </div>
-        </div>
-      </div>`
+      <ul class="contact-list" data-stagger>
+        <li>
+          <i class="bi bi-envelope" aria-hidden="true"></i>
+          <div><span class="contact-label">Email</span>
+            <a href="mailto:${owner.email}">${owner.email}</a></div>
+        </li>
+        <li>
+          <i class="bi bi-whatsapp" aria-hidden="true"></i>
+          <div><span class="contact-label">WhatsApp</span>
+            <a href="${owner.whatsapp}" target="_blank" rel="noopener noreferrer">${owner.phoneFormatted}</a></div>
+        </li>
+        <li>
+          <i class="bi bi-geo-alt" aria-hidden="true"></i>
+          <div><span class="contact-label">Ubicación</span>
+            <span>${owner.location}</span></div>
+        </li>
+      </ul>`
         );
     }
 
@@ -616,9 +619,9 @@
         let btns = '';
         // Solo se pinta el botón si el enlace es real; antes un '#' generaba un botón muerto.
         if (isExternal(p.github))
-            btns += `<a href="${esc(p.github)}" target="_blank" rel="noopener noreferrer" class="btn custom-btn me-2"><i class="bi bi-github me-2"></i>Ver Código</a>`;
+            btns += `<a href="${esc(p.github)}" target="_blank" rel="noopener noreferrer" class="btn btn-primary-solid me-2"><i class="bi bi-github me-2"></i>Ver Código</a>`;
         if (isExternal(p.demo))
-            btns += `<a href="${esc(p.demo)}" target="_blank" rel="noopener noreferrer" class="btn btn-outline-light"><i class="bi bi-box-arrow-up-right me-2"></i>Demo en Vivo</a>`;
+            btns += `<a href="${esc(p.demo)}" target="_blank" rel="noopener noreferrer" class="btn btn-ghost"><i class="bi bi-box-arrow-up-right me-2"></i>Demo en Vivo</a>`;
         fill('projectLinksButtons', btns);
 
         if (p.demoAccess?.length) {
@@ -727,7 +730,7 @@
     function initAll() {
         // Social hero y footer
         const heroSocialEl = document.getElementById('heroSocial');
-        if (heroSocialEl) heroSocialEl.innerHTML = renderSocialIcons(socialLinks, true);
+        if (heroSocialEl) heroSocialEl.innerHTML = renderSocialIcons(socialLinks);
         const footerEl = document.getElementById('siteFooter');
         if (footerEl) footerEl.innerHTML = renderFooter();
 
@@ -744,12 +747,11 @@
         initSmoothScroll();
         initActiveNav();
         initStatsCounter();
-        initSkillBars();
+        initReveal();
         initContactForm();
         initTooltips();
         initProjectDetail();
 
-        console.log('🚀 Portfolio de Luisa inicializado');
     }
 
     if (document.readyState === 'loading') {

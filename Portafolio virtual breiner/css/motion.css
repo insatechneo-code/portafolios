@@ -1,0 +1,199 @@
+/* ============================================================================
+   MOTION.CSS — Animaciones y efectos del portafolio de Breiner
+   Se carga después de style.css. La lógica (mira, cota, inclinación 3D, filtro,
+   modo plano, copiar) está en js/interactions.js.
+
+   Reglas (skill "motion"):
+   - Controles (botones, menú, hovers): 100 / 150 / 200 / 300 ms, ease-out al
+     entrar, sin rebotes ni bucles infinitos; solo transform y opacity (más color
+     o borde en ≤150 ms).
+   - Excepción documentada: la entrada del hero, el revelado del tema y las
+     apariciones al hacer scroll usan 600 ms con cascadas de 60 ms. Son
+     coreografía de la página, no de los controles, y ocurren una sola vez.
+   - prefers-reduced-motion apaga todo (al final del archivo).
+   ============================================================================ */
+
+:root {
+    --motion-100: 100ms;
+    --motion-150: 150ms;
+    --motion-200: 200ms;
+    --motion-300: 300ms;
+    --motion-scene: 600ms;  /* excepción: coreografía de entrada */
+    --stagger: 60ms;
+    --ease-out: cubic-bezier(.16, 1, .3, 1);
+    --ease-in: cubic-bezier(.7, 0, .84, 0);
+}
+
+/* ---------- Keyframes (los que solo tienen "from" terminan en el estado normal) ---------- */
+@keyframes fade-up { from { opacity: 0; transform: translateY(16px); } }
+@keyframes fade-in { from { opacity: 0; } }
+@keyframes line-up { from { transform: translateY(105%); } }
+@keyframes draw-x { from { transform: scaleX(0); } }
+@keyframes pop { from { opacity: 0; transform: scale(0); } }
+@keyframes reg-in { from { opacity: 0; transform: translate(var(--rx-from, 0), var(--ry-from, 0)); } }
+@keyframes item-in { from { opacity: 0; transform: translateY(8px); } }
+@keyframes stack-in { from { transform: none; opacity: 0; } }
+@keyframes vt-reveal {
+    from { clip-path: circle(0 at var(--vt-x, 50%) var(--vt-y, 0)); }
+    to { clip-path: circle(150vmax at var(--vt-x, 50%) var(--vt-y, 0)); }
+}
+
+/* ---------- 1. Hero: el plano se dibuja ---------- */
+.hero-name .line { display: block; overflow: hidden; padding-bottom: .04em; white-space: nowrap; }
+.hero-name .line-inner { display: block; animation: line-up var(--motion-scene) var(--ease-out) backwards; }
+.hero-name .line:nth-child(2) .line-inner { animation-delay: 90ms; }
+
+/* La cota se traza desde el centro y luego aparece la medida. */
+.dimension-line { animation: draw-x var(--motion-scene) var(--ease-out) 250ms backwards; }
+.dimension-value { animation: fade-in var(--motion-300) ease 650ms backwards; }
+
+.hero-role    { animation: fade-up var(--motion-scene) var(--ease-out) 300ms backwards; }
+.hero-actions { animation: fade-up var(--motion-scene) var(--ease-out) 380ms backwards; }
+.hero-social  { animation: fade-in var(--motion-scene) var(--ease-out) 480ms backwards; }
+
+.drawing-frame { animation: fade-in var(--motion-scene) var(--ease-out) 200ms backwards; }
+.reg { animation: reg-in var(--motion-300) var(--ease-out) 500ms backwards; }
+.reg-tl { --rx-from: -8px; --ry-from: -8px; }
+.reg-tr { --rx-from: 8px; --ry-from: -8px; }
+.reg-bl { --rx-from: -8px; --ry-from: 8px; }
+.reg-br { --rx-from: 8px; --ry-from: 8px; }
+
+/* Cotas de la foto: se trazan después de que aparece la lámina. */
+@keyframes draw-y { from { transform: scaleY(0); } }
+.dimension--photo .dimension-line { animation-delay: 700ms; }
+.dimension--photo .dimension-value { animation-delay: 1100ms; }
+.dimension--v .dimension-line { animation-name: draw-y; animation-delay: 800ms; }
+.dimension--v .dimension-value { animation-delay: 1150ms; }
+.lens-hint { animation: fade-in var(--motion-scene) ease 1200ms backwards; }
+
+/* Lente de plano: el círculo crece al entrar y sigue al cursor con un leve retardo. */
+.lens-layer { transition: clip-path var(--motion-150) var(--ease-out); }
+.lens-ring { transition: opacity var(--motion-150) ease, transform var(--motion-150) var(--ease-out); }
+
+.crosshair { transition: opacity var(--motion-150) ease; }
+
+/* ---------- 2. Apariciones al hacer scroll ---------- */
+.reveal-ready .reveal { opacity: 0; }
+.reveal-ready .reveal.is-visible { opacity: 1; animation: fade-up var(--motion-scene) var(--ease-out) backwards; }
+
+.reveal-ready .reveal[data-stagger] > *,
+.reveal-ready .reveal [data-stagger] > * { opacity: 0; }
+.reveal-ready .reveal.is-visible[data-stagger] > *,
+.reveal-ready .reveal.is-visible [data-stagger] > * {
+    opacity: 1;
+    animation: item-in var(--motion-scene) var(--ease-out) backwards;
+    animation-delay: calc(var(--i, 0) * var(--stagger) + 150ms);
+}
+
+/* Raya bajo cada grupo de habilidades: se dibuja de izquierda a derecha. */
+.skill-group-title { position: relative; border-bottom-color: transparent; }
+.skill-group-title::after {
+    content: ''; position: absolute; left: 0; right: 0; bottom: -1.5px; height: 1.5px;
+    background: var(--ink); transform-origin: left;
+}
+.reveal-ready .reveal.is-visible .skill-group-title::after { animation: draw-x var(--motion-scene) var(--ease-out) 100ms backwards; }
+
+/* Proyectos: las capturas de atrás salen de debajo de la principal. */
+.reveal-ready .project-row.is-visible .shot-back { animation: stack-in var(--motion-scene) var(--ease-out) 300ms backwards; }
+
+/* ---------- 3. Regla de lectura y navegación ---------- */
+.navbar .nav-link::after {
+    content: ''; position: absolute; left: .65rem; right: .65rem; bottom: .1rem; height: 2px;
+    background: var(--accent); transform: scaleX(0); transform-origin: left;
+    transition: transform var(--motion-200) var(--ease-out);
+}
+.navbar .nav-link.active::after { transform: scaleX(1); }
+
+/* ---------- 4. Botones, íconos y controles ---------- */
+.btn { transition: background-color var(--motion-150) ease, color var(--motion-150) ease, border-color var(--motion-150) ease, transform var(--motion-100) var(--ease-out); }
+.btn:active { transform: scale(.98); }
+.btn .bi { display: inline-block; transition: transform var(--motion-150) var(--ease-out); }
+.btn-theme-toggle .bi { transition: transform var(--motion-200) var(--ease-out); }
+
+.part-toggle { transition: transform var(--motion-200) var(--ease-out); }
+.part-head[aria-expanded="true"] .part-toggle { transform: rotate(45deg); }
+.part-body:not([hidden]) { animation: item-in var(--motion-300) var(--ease-out); }
+.part-head { transition: background-color var(--motion-150) ease; }
+
+.skill-chip { transition: opacity var(--motion-200) ease, border-color var(--motion-150) ease, translate var(--motion-150) var(--ease-out); }
+.level-btn { transition: background-color var(--motion-150) ease, color var(--motion-150) ease, border-color var(--motion-150) ease; }
+
+.copy-btn { transition: border-color var(--motion-150) ease, color var(--motion-150) ease; }
+.copy-btn.is-done { color: var(--accent); border-color: var(--accent); }
+.copy-btn.is-done .bi { animation: pop var(--motion-300) var(--ease-out); }
+
+.live-toast { transition: opacity var(--motion-200) var(--ease-out), transform var(--motion-200) var(--ease-out); }
+.scroll-top-btn { transition: opacity var(--motion-200) var(--ease-out), transform var(--motion-200) var(--ease-out), visibility var(--motion-200), background-color var(--motion-150) ease; }
+
+/* ---------- 5. Hover (solo con mouse) ---------- */
+@media (hover: hover) and (pointer: fine) {
+    .navbar .nav-link:hover::after { transform: scaleX(1); }
+
+    .btn:hover .bi-download { transform: translateY(2px); }
+    .btn:hover .bi-send { transform: translate(2px, -2px); }
+    .btn:hover .bi-box-arrow-up-right { transform: translate(2px, -2px); }
+    .btn:hover .bi-file-earmark-text { transform: translateY(-2px); }
+    .btn:hover .bi-arrow-down { transform: translateY(3px); }
+    .btn:hover .bi-bounding-box { transform: scale(1.12); }
+    .btn-theme-toggle:hover .bi { transform: rotate(-20deg); }
+
+    .social-icon-link { transition: border-color var(--motion-150) ease, color var(--motion-150) ease, transform var(--motion-150) var(--ease-out); }
+    .social-icon-link:hover { transform: translateY(-2px); }
+
+    /* Proyectos: la captura se inclina siguiendo el cursor (--rx / --ry) y las de
+       atrás se abren en abanico. */
+    .shot-stack {
+        transform: rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg));
+        transition: transform var(--motion-150) var(--ease-out);
+    }
+    .shot-back { transition: transform var(--motion-300) var(--ease-out); }
+    .project-visual:hover .shot-back-1 { transform: translate(-7%, -9%) rotate(-5deg); }
+    .project-visual:hover .shot-back-2 { transform: translate(8%, -13%) rotate(5deg); }
+
+    .spec-row::before {
+        content: ''; position: absolute; left: -1.25rem; top: 2rem; bottom: 2rem; width: 2px;
+        background: var(--accent); transform: scaleY(0); transform-origin: top;
+        transition: transform var(--motion-200) var(--ease-out);
+    }
+    .spec-row:hover::before { transform: scaleY(1); }
+
+    .skill-chip:hover { translate: 0 -2px; border-color: var(--accent); }
+    .cert-stamp { transition: transform var(--motion-300) var(--ease-out); }
+    .cert-card:hover .cert-stamp { transform: rotate(0deg) scale(1.08); }
+    .team-member-card { transition: translate var(--motion-200) var(--ease-out), border-color var(--motion-150) ease; }
+    .team-member-card:hover { translate: 0 -4px; border-color: var(--accent); }
+    .project-screenshot img { transition: transform var(--motion-300) var(--ease-out); }
+    .project-screenshot:hover img { transform: scale(1.03); }
+}
+
+/* ---------- 6. Cambio de tema: el nuevo tema crece en círculo desde el botón ---------- */
+::view-transition-old(root) { animation: none; }
+::view-transition-new(root) { animation: vt-reveal var(--motion-scene) var(--ease-out); }
+
+/* Detalle de proyecto: el encabezado entra en cascada. */
+.project-hero-info > * { animation: fade-up var(--motion-scene) var(--ease-out) backwards; }
+.project-hero-info > :nth-child(2) { animation-delay: 80ms; }
+.project-hero-info > :nth-child(3) { animation-delay: 160ms; }
+.project-hero-info > :nth-child(n+4) { animation-delay: 240ms; }
+.project-main-image { animation: fade-up var(--motion-scene) var(--ease-out) 200ms backwards; }
+
+/* ---------- 7. Movimiento reducido: todo aparece en su estado final ---------- */
+@media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    *,
+    *::before,
+    *::after,
+    ::view-transition-new(root) {
+        animation-duration: .01ms !important;
+        animation-delay: 0s !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: .01ms !important;
+        transition-delay: 0s !important;
+    }
+    .reveal-ready .reveal,
+    .reveal-ready .reveal[data-stagger] > *,
+    .reveal-ready .reveal [data-stagger] > * { opacity: 1; }
+    .shot-stack { transform: none !important; }
+    .crosshair { display: none; }
+    .lens-layer, .lens-ring { transition: none !important; }
+}

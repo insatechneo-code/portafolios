@@ -116,3 +116,78 @@ Búscalos como `PENDIENTE`:
    organización, así los repos quedan a nombre de INSATECH NEO y no de una persona.
 6. **Publicar el primer proyecto** — plantilla comentada y documentada en
    `js/portfolio-data.js`
+
+---
+
+# Rediseño — «Circuito» (22 oct 2026)
+
+Copia completa de la versión anterior en `_respaldo-diseno/` (sin los videos). Textos,
+servicios y datos del equipo no cambiaron: todo sigue saliendo de `js/portfolio-data.js`.
+
+**Idea visual.** La identidad sale del logo: sus colores y sus pistas de circuito. Es una
+marca distinta de los dos portafolios personales (otra paleta, otras fuentes, otra idea).
+
+**Paleta** (variables al inicio de `css/style.css`), tomada del logo con un muestreo de
+píxeles: verde lima `#8FD84E`, verde `#62D27A`, turquesa `#48C0A8`, cian `#22BFD8`.
+- Oscuro: azul noche `#0B1622` (el fondo del logo), panel `#122130`, botones en cian.
+- Claro: `#F7FAF9`, tinta `#0B2A2E` y los tonos del logo oscurecidos para que el texto
+  cumpla contraste (botones `#0B7A90` con texto blanco).
+- El degradado del logo solo se usa en líneas (pistas, riel, borde del contacto, anillo de
+  las fotos), nunca como relleno de botones.
+
+**Tipografías.** *Red Hat Display* (títulos) y *Red Hat Text* (texto). Reemplazan a Outfit.
+
+**Qué cambió:**
+- **Hero:** sin video (era un concierto en rojo, sin relación con la empresa). La oferta va
+  como título principal y el botón principal es **Iniciar Proyecto**. A la derecha, el logo
+  con ocho pistas de circuito que se dibujan al cargar.
+- **Nosotros:** las cifras son nodos unidos por una pista. Se quitó la imagen
+  `logo-neo.jpeg` de esta sección (repetía el logo y tiene una marca de agua de estrella
+  en la esquina inferior derecha).
+- **Servicios:** tablero 2×2 de "nodos" con pistas punteadas entre ellos; los secundarios
+  van en una fila compacta.
+- **Equipo:** perfil compacto; la experiencia y la educación se despliegan con
+  "Ver trayectoria".
+- **Tecnologías:** filas con el nivel como 3 LEDs (Sólido 3, En práctica 2, Explorando 1).
+- **Proyectos vacíos:** un conector abierto (pista que termina en un anillo con "+") y el
+  botón **Cuéntanos tu proyecto**.
+- **Contacto:** bloque con la línea del degradado arriba, etiquetas visibles en el formulario.
+- **Detalle de proyecto:** mismo estilo; si el enlace no corresponde a ningún proyecto, se
+  muestra un mensaje claro y un botón para volver, en vez de secciones vacías.
+- Se quitó la pastilla "Innovación • Desarrollo • Tecnología" del hero.
+
+## Animaciones e interacciones
+
+Archivos: `css/motion.css` y `js/interactions.js`. Siguen la skill "motion" (controles en
+100–300 ms, sin rebotes ni bucles). Excepción documentada: la entrada del hero, el trazado
+de las pistas y las apariciones al hacer scroll usan 600 ms, una sola vez.
+
+- **Pistas del logo:** se trazan hacia afuera al cargar y sus terminales aparecen al final.
+- **Paralaje:** con mouse, el logo se acerca al cursor y las pistas se alejan un poco.
+- **Riel de circuito** (pantallas de 1200 px o más): una pista vertical acompaña la página,
+  se llena con el degradado del logo a medida que se baja y cada título de sección tiene
+  un nodo que se enciende al llegar. Usa el único listener de scroll de `main.js`.
+- **Servicios:** en hover la tarjeta sube y su punto de conexión se enciende.
+- **LEDs** del stack que se encienden uno tras otro; cascadas suaves en listas.
+- **Cambio de tema** con fundido (Chrome y Edge).
+- Todo se desactiva con `prefers-reduced-motion`; los efectos de puntero solo con mouse.
+
+**Errores corregidos de paso:** al hacer `<main>` relativo (por el riel), el resaltado del
+menú y el desplazamiento al hacer clic usaban `offsetTop`, que pasaba a medirse desde
+`<main>`; ahora usan la posición real en la página. "Inicio" se marca al estar arriba.
+Entre 992 y 1199 px el botón Contáctanos queda solo con su ícono para que el menú quepa.
+
+**Se mantiene:** labels, foco visible, un solo listener de scroll, `noscript`, Open Graph y
+datos estructurados `Organization`. Se añadió "Saltar al contenido".
+
+**Comprobado:** capturas en 375, 768, 1024, 1280 y 1440 px en claro y oscuro, sin scroll
+horizontal ni errores en consola; menú, desplazamiento, trayectoria, riel, tema y
+movimiento reducido probados en el navegador.
+
+## Pendientes que no son de diseño
+
+- **Fotos del equipo:** `images/breiner.jpg` y `images/luisa.jpg` son avatares. La foto real
+  de Breiner está en su portafolio (`Portafolio virtual breiner/images/perfil.jpg`).
+- **`video/`** (≈5 MB) ya no se usa: se puede borrar. Antes de publicar, borra también
+  `_respaldo-diseno/` o sácala del despliegue.
+- Siguen los pendientes de antes: EmailJS sin configurar y `SITE_URL` en las etiquetas OG.

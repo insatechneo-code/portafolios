@@ -111,3 +111,134 @@ cada despliegue:
 - `pexels-2022395.mp4` — 4,2 MB
 
 Y en `images/`, `perfil 01.jpg` (54 KB) tampoco se referencia. La carpeta `fonts/` está vacía.
+
+---
+
+# Actualización 22 oct 2026 — alineado con la hoja de vida
+
+Copia de lo anterior en `_respaldo-2026-10-22/`.
+
+- **LinkedIn** añadido (íconos del hero, footer y datos estructurados).
+- **SITE_URL** reemplazado por `https://portafolio-breiner-guisao.onrender.com`.
+- **Sobre mí** reescrito con el perfil de la hoja de vida (Next.js, .NET, servidor Linux).
+- **Nueva sección "Más proyectos"** debajo de las tarjetas: FEV-Core, granjas avícolas,
+  Gestión Técnica Integral y servidor Linux, con stack y enlace al código. Se edita en
+  `otherProjects` dentro de `portfolio-data.js`.
+- **Cifra "Proyectos"**: de 3 publicados a 7 desarrollados (los que ahora muestra el sitio).
+- **Anime Trivia**: demo apuntando a `pregunta2-uppg.onrender.com` (la URL que tiene hoy el
+  repo), revisión humana de preguntas y validación del lado del servidor.
+- **Niveles de habilidades** igualados a los de la hoja de vida (Alto = Sólido,
+  Bueno = En práctica, Básico = Explorando). Añadidos C#, .NET, Docker y servidores Linux.
+- **Experiencia, formación y habilidades blandas** con el mismo texto de la hoja de vida;
+  "Técnico Laboral en Mantenimiento de Sistemas" pasa a "Técnico Laboral en Sistemas".
+- **Certificados**: quitados los dos títulos (ya están en Formación); Redes de Datos con
+  su calificación 9.64/10.
+- **`assets/cv.pdf`** reemplazado por la hoja de vida nueva (era la del 18 de septiembre).
+
+## Correcciones 22 oct 2026 (la hoja de vida manda)
+
+- Registro escolar: fecha 2025.
+- Anime Trivia: nueve categorías y "tablas de posiciones", como en la hoja de vida.
+- Granjas avícolas: stack Next.js · TypeScript · Tailwind CSS · Docker.
+- Habilidades blandas: las seis de la hoja de vida (se quitaron Trabajo en Equipo y Trabajo Bajo Presión); ahora en grilla de 3 × 2.
+- Cifra de experiencia: de 2 años a 1 año (las dos experiencias suman algo más de 12 meses).
+- Hero: "Técnico en Mantenimiento de Sistemas" → "Técnico Laboral en Sistemas".
+
+---
+
+# Rediseño — «Plano técnico» (22 oct 2026)
+
+Copia completa de la versión anterior en `_respaldo-diseno/` (sin los videos que no se
+usaban). Los datos no cambiaron: todo sigue saliendo de `js/portfolio-data.js`.
+
+**Idea visual.** Hardware + software: papel milimetrado, cotas, cajetín de plano y fichas
+técnicas. Es una marca distinta de la de Luisa (otra paleta, otras fuentes y otra idea).
+
+**Paleta** (variables al inicio de `css/style.css`):
+- Claro: papel `#EEF0F2`, grafito `#1C1F24`, naranja señal `#CF430F`, azul plano `#2F5BD3`.
+- Oscuro: `#15171B`, panel `#1C1F24`, naranja `#FF6A33`, azul `#7EA0FF`.
+
+**Tipografías.** *Archivo* en ancho expandido para títulos y *Public Sans* para el texto.
+
+**Qué cambió por sección:**
+- **Hero:** sin video. Nombre grande con una cota debajo que mide su ancho real en px (cambia
+  al redimensionar la ventana). Botón principal **Ver proyectos** y **Descargar CV**. Tu foto
+  va en una lámina con marcas de registro y tres anotaciones: Next.js, Laravel y .NET; soporte
+  técnico en telecomunicaciones; servidor Debian propio.
+- **Sobre mí:** las cifras pasaron a un *cajetín* (el recuadro de datos de un plano).
+- **Experiencia y formación:** tabla de especificaciones con fechas, cargo y tareas.
+- **Proyectos:** cada uno es una fila grande con la captura en un marco de navegador (con el
+  dominio real de la demo) y su ficha técnica: rol, fecha, duración y stack.
+- **Más proyectos:** "lista de piezas" desplegable; cada fila se abre para ver la descripción
+  y el enlace al código.
+- **Notas al pie:** el aviso de GitHub y el de las demos gratuitas quedaron como notas.
+- **Habilidades:** chips agrupados por área, con el nivel como barras de señal (3 = Sólido,
+  2 = En práctica, 1 = Explorando) y un filtro por nivel.
+- **Certificados:** tarjetas con sello.
+- **Contacto:** hoja invertida (oscura en modo claro y clara en modo oscuro), etiquetas visibles
+  en el formulario y botones para copiar el correo y el número.
+- **Detalle de proyecto:** mismo estilo; el visor de capturas sigue igual.
+
+**Texto actualizado en "Sobre este sitio":** decía que el video de portada bajó de 18 MB a
+menos de 1 MB; como ya no hay video, ahora dice "Sin video de portada, imágenes en carga
+diferida y un solo manejador de scroll".
+
+## Interacciones y animaciones
+
+Archivos: `css/motion.css` (animaciones) y `js/interactions.js` (lógica). Siguen la skill
+"motion": controles en 100–300 ms, sin rebotes ni bucles, solo `transform` y `opacity`.
+Excepción documentada: la entrada del hero, el revelado del tema y las apariciones al hacer
+scroll usan 600 ms, una sola vez.
+
+- **Mira de CAD:** en el hero, con mouse, dos líneas siguen al cursor con sus coordenadas.
+- **Cota viva:** mide el nombre en px y se actualiza al cambiar el tamaño de la ventana.
+- **El plano se dibuja al cargar:** el nombre sube línea por línea, la cota se traza desde
+  el centro, aparecen las marcas de registro y luego cada anotación (punto, línea y texto).
+  En hover, la anotación se marca.
+- **Capturas en 3D:** la captura de cada proyecto se inclina siguiendo el cursor y las dos
+  capturas de atrás se abren en abanico.
+- **Lista de piezas** desplegable, con el "+" que gira a "×".
+- **Filtro de habilidades:** atenúa las que no son del nivel elegido y anuncia cuántas hay.
+- **Copiar:** el correo y el número se copian con un clic, con confirmación.
+- **Modo plano:** el botón "Ver los planos de esta página" (en "Sobre este sitio") pinta todo
+  el sitio como un plano azul, con cada caja dibujada en línea discontinua y la etiqueta de
+  cada sección (`<section id="…">`). Se sale con Esc o con el mismo botón.
+- **Cambio de tema:** el tema nuevo se revela en un círculo que crece desde el botón (Chrome
+  y Edge; en los demás navegadores el cambio es directo).
+- **Regla de lectura:** bajo el navbar, una regla con marcas se llena de naranja con el
+  scroll. Usa el mismo listener de scroll de `main.js` (sigue habiendo uno solo).
+- Apariciones en cascada al hacer scroll, subrayado animado en el menú e íconos que
+  reaccionan en los botones.
+
+Los efectos de puntero solo se activan con mouse. Con `prefers-reduced-motion` no hay
+animaciones, mira ni inclinación: todo aparece en su estado final.
+
+**Se mantiene:** labels en el formulario, foco visible, un solo listener de scroll, aviso
+`noscript`, Open Graph y datos estructurados `Person`. Se añadió "Saltar al contenido".
+
+**Comprobado:** capturas en 375, 768, 1024, 1280 y 1440 px en modo claro y oscuro, sin
+scroll horizontal y sin errores en consola; cada interacción probada en el navegador.
+
+## Archivos que ya no se usan
+
+`video/` completo (incluido `hero.mp4`, ≈28 MB en total) ya no se usa: se puede borrar.
+`images/hero-poster.jpg` se queda porque es la imagen de vista previa de Open Graph.
+Antes de publicar, borra también `_respaldo-diseno/` o sácala del despliegue.
+
+## Ajuste tras revisión (22 oct 2026)
+
+Reemplaza dos cosas de la lista de arriba que no convencieron:
+
+- **Foto del hero:** se quitaron las tres anotaciones. Ahora la foto va limpia, con una cota
+  de ancho debajo y otra de alto a la derecha (medidas reales en pantalla), y un **lente de
+  plano**: al pasar el cursor, un círculo con mira sigue al mouse y deja ver la foto en
+  versión plano azul con cuadrícula. En celular se activa tocando la foto. Un texto pequeño
+  bajo la foto lo indica. Sobre la foto se oculta la mira de CAD del hero.
+- **Modo plano → Inspector:** el botón de "Sobre este sitio" ahora dice "Inspeccionar esta
+  página". La página no cambia de color: al pasar el cursor (o con el foco del teclado, o
+  tocando en celular) cada bloque se marca con un contorno naranja y una etiqueta como la de
+  las herramientas de desarrollador, por ejemplo `section#projects 1116 × 840`. Mientras está
+  activo, un clic inspecciona en lugar de abrir enlaces. Se sale con Esc, con el botón
+  flotante "Salir del inspector" o con el mismo botón.
+- **Menú entre 992 y 1199 px:** no cabía ("Sobre Mí" se partía y el botón de CV se salía de
+  la pantalla). En ese rango los enlaces van más juntos y el botón de CV queda solo con su ícono.

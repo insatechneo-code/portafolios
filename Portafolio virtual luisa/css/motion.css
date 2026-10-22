@@ -1,0 +1,206 @@
+/* ============================================================================
+   MOTION.CSS — Animaciones y efectos del portafolio de Luisa
+   Se carga después de style.css.
+
+   Reglas (skill "motion"):
+   - Controles (botones, menú, hovers): solo 100 / 150 / 200 / 300 ms, ease-out al
+     entrar, sin rebotes ni bucles infinitos, y solo transform / opacity (más
+     color o borde en ≤150 ms).
+   - Excepción documentada: la entrada del hero y las apariciones al hacer scroll
+     usan 600 ms con cascadas de 60 ms. Son coreografía de la página, no de los
+     controles, y ocurren una sola vez.
+   - prefers-reduced-motion apaga todo (al final del archivo).
+
+   Las apariciones dependen de dos clases que pone main.js:
+   body.reveal-ready  -> hay IntersectionObserver; sin él todo queda visible
+   .reveal.is-visible -> el bloque ya entró en pantalla
+   Los hijos de un contenedor [data-stagger] reciben --i (0, 1, 2…) para la cascada.
+   ============================================================================ */
+
+:root {
+    --motion-100: 100ms;
+    --motion-150: 150ms;
+    --motion-200: 200ms;
+    --motion-300: 300ms;
+    --motion-scene: 600ms;   /* excepción: coreografía de entrada */
+    --stagger: 60ms;
+    --ease-out: cubic-bezier(.16, 1, .3, 1);
+    --ease-in: cubic-bezier(.7, 0, .84, 0);
+}
+
+/* ---------- Keyframes (los que solo tienen "from" terminan en el estado normal) ---------- */
+@keyframes fade-up { from { opacity: 0; transform: translateY(16px); } }
+@keyframes fade-in { from { opacity: 0; } }
+@keyframes line-up { from { transform: translateY(105%); } }
+@keyframes card-drop { from { opacity: 0; transform: rotate(8deg) translateY(28px); } }
+@keyframes sheet-slide { from { opacity: 0; transform: rotate(0deg) translate(0, 0); } }
+@keyframes tab-rise { from { transform: translateY(100%); } }
+@keyframes item-in { from { opacity: 0; transform: translateY(8px); } }
+@keyframes rule-draw { from { transform: scaleX(0); } }
+@keyframes sheet-fan { from { transform: none; } }
+
+/* ---------- 1. Hero: el nombre sube línea por línea y la ficha cae en su sitio ---------- */
+.hero-name .line { display: block; overflow: hidden; padding-bottom: .06em; }
+.hero-name .line-inner { display: block; animation: line-up var(--motion-scene) var(--ease-out) backwards; }
+.hero-name .line:nth-child(2) .line-inner { animation-delay: 90ms; }
+
+.hero-role    { animation: fade-up var(--motion-scene) var(--ease-out) 220ms backwards; }
+.hero-actions { animation: fade-up var(--motion-scene) var(--ease-out) 300ms backwards; }
+.hero-social  { animation: fade-in var(--motion-scene) var(--ease-out) 420ms backwards; }
+
+.hero-card { animation: card-drop var(--motion-scene) var(--ease-out) 200ms backwards; }
+.file-stack::before { animation: sheet-slide var(--motion-scene) var(--ease-out) 380ms backwards; }
+
+/* ---------- 2. Apariciones al hacer scroll ---------- */
+.reveal-ready .reveal { opacity: 0; }
+.reveal-ready .reveal.is-visible {
+    opacity: 1;
+    animation: fade-up var(--motion-scene) var(--ease-out) backwards;
+}
+
+.reveal-ready .reveal[data-stagger] > *,
+.reveal-ready .reveal [data-stagger] > * { opacity: 0; }
+.reveal-ready .reveal.is-visible[data-stagger] > *,
+.reveal-ready .reveal.is-visible [data-stagger] > * {
+    opacity: 1;
+    animation: item-in var(--motion-scene) var(--ease-out) backwards;
+    animation-delay: calc(var(--i, 0) * var(--stagger) + 150ms);
+}
+
+/* Carpetas: la pestaña asoma desde detrás del cuerpo después de que este aparece. */
+.reveal-ready .folder.is-visible .folder-tab,
+.reveal-ready .empty-folder.is-visible .folder-tab {
+    animation: tab-rise var(--motion-scene) var(--ease-out) 200ms backwards;
+}
+
+/* Índice de habilidades: la raya bajo el título se dibuja de izquierda a derecha. */
+.skill-index-title { position: relative; border-bottom-color: transparent; }
+.skill-index .skill-index-title::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -2px;
+    height: 2px;
+    background: var(--ink);
+    transform-origin: left;
+}
+.reveal-ready .skill-index.is-visible .skill-index-title::after {
+    animation: rule-draw var(--motion-scene) var(--ease-out) 100ms backwards;
+}
+
+/* Proyectos vacíos: las hojas salen apiladas y se abren en abanico. */
+.reveal-ready .empty-folder.is-visible .empty-folder-sheets span:nth-child(1),
+.reveal-ready .empty-folder.is-visible .empty-folder-sheets span:nth-child(2) {
+    animation: sheet-fan var(--motion-scene) var(--ease-out) 300ms backwards;
+}
+
+/* Detalle de proyecto: misma entrada que el hero, en cascada. */
+.project-hero-section .col-12 > * { animation: fade-up var(--motion-scene) var(--ease-out) backwards; }
+.project-hero-section .col-12 > :nth-child(2) { animation-delay: 80ms; }
+.project-hero-section .col-12 > :nth-child(3) { animation-delay: 160ms; }
+.project-hero-section .col-12 > :nth-child(4) { animation-delay: 240ms; }
+.project-hero-section .col-12 > :nth-child(n+5) { animation-delay: 320ms; }
+
+/* ---------- 3. Barra de progreso de lectura (main.js actualiza --scroll) ---------- */
+.scroll-progress {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -1px;
+    height: 2px;
+    background: var(--accent);
+    transform-origin: left;
+    transform: scaleX(var(--scroll, 0));
+    pointer-events: none;
+}
+
+/* ---------- 4. Navegación: el subrayado crece en hover y se queda en la sección activa ---------- */
+.navbar .nav-link::after {
+    content: '';
+    position: absolute;
+    left: .7rem;
+    right: .7rem;
+    bottom: .1rem;
+    height: 2px;
+    background: var(--accent);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform var(--motion-200) var(--ease-out);
+}
+.navbar .nav-link.active::after { transform: scaleX(1); }
+
+/* ---------- 5. Botones e íconos ---------- */
+.btn .bi { display: inline-block; transition: transform var(--motion-150) var(--ease-out); }
+.btn:active { transform: scale(.98); }
+
+.btn-theme-toggle .bi { transition: transform var(--motion-200) var(--ease-out); }
+
+/* ---------- 6. Hover (solo en dispositivos con puntero) ---------- */
+@media (hover: hover) and (pointer: fine) {
+    .navbar .nav-link:hover::after { transform: scaleX(1); }
+
+    .btn:hover .bi-download { transform: translateY(2px); }
+    .btn:hover .bi-send { transform: translate(2px, -2px); }
+    .btn:hover .bi-github,
+    .btn:hover .bi-chat-dots { transform: translateY(-2px); }
+    .btn-theme-toggle:hover .bi { transform: rotate(-15deg); }
+
+    .social-icon-link { transition: border-color var(--motion-150) ease, color var(--motion-150) ease, transform var(--motion-150) var(--ease-out); }
+    .social-icon-link:hover { transform: translateY(-2px); }
+
+    /* La ficha se endereza al pasar el cursor. */
+    .file-card { transition: transform var(--motion-300) var(--ease-out); }
+    .file-stack:hover .file-card { transform: rotate(0deg) translateY(-4px); }
+    .file-stack::before { transition: transform var(--motion-300) var(--ease-out); }
+    .file-stack:hover::before { transform: rotate(-7deg) translate(-7%, 3%); }
+
+    /* Carpetas: se levantan un poco y la pestaña toma el color de acento. */
+    .folder { transition: translate var(--motion-200) var(--ease-out); }
+    .folder:hover { translate: 0 -4px; }
+    .folder .folder-tab { transition: background-color var(--motion-150) ease, color var(--motion-150) ease; }
+    .folder:hover .folder-tab { background: var(--accent); color: var(--accent-ink); }
+
+    /* Hojas vacías: se abren un poco más. */
+    .empty-folder-sheets span { transition: transform var(--motion-300) var(--ease-out); }
+    .empty-folder:hover .empty-folder-sheets span:nth-child(1) { transform: rotate(-12deg) translate(-18px, 8px); }
+    .empty-folder:hover .empty-folder-sheets span:nth-child(2) { transform: rotate(8deg) translate(16px, 0); }
+
+    /* Filas de índice: el ícono avanza. */
+    .skill-index-list .bi { transition: transform var(--motion-150) var(--ease-out); }
+    .skill-index-list li:hover .bi { transform: translateX(3px); }
+
+    .chip { transition: border-color var(--motion-150) ease, translate var(--motion-150) var(--ease-out); }
+    .chip:hover { border-color: var(--accent); translate: 0 -2px; }
+
+    .github-repo-card .bi-github { transition: transform var(--motion-150) var(--ease-out); }
+    .github-repo-card:hover .bi-github { transform: rotate(-12deg); }
+
+    .cert-item .bi { transition: transform var(--motion-200) var(--ease-out); }
+    .cert-item:hover .bi { transform: scale(1.15); }
+
+    .team-member-card { transition: translate var(--motion-200) var(--ease-out), border-color var(--motion-150) ease; }
+    .team-member-card:hover { translate: 0 -4px; border-color: var(--accent); }
+}
+
+/* ---------- 7. Cambio de tema: fundido con View Transitions (main.js) ---------- */
+::view-transition-old(root),
+::view-transition-new(root) { animation-duration: var(--motion-300); animation-timing-function: ease; }
+
+/* ---------- 8. Movimiento reducido: todo aparece en su estado final ---------- */
+@media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    *,
+    *::before,
+    *::after {
+        animation-duration: .01ms !important;
+        animation-delay: 0s !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: .01ms !important;
+        transition-delay: 0s !important;
+    }
+    .reveal-ready .reveal,
+    .reveal-ready .reveal[data-stagger] > *,
+    .reveal-ready .reveal [data-stagger] > * { opacity: 1; }
+    .scroll-progress { display: none; }
+}

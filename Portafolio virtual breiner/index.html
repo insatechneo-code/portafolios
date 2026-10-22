@@ -5,24 +5,23 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description"
-        content="Portafolio profesional de Breiner Stiven Guisao Rodriguez - Tecnólogo en Análisis y Desarrollo de Software & Técnico en Mantenimiento de Sistemas">
+        content="Portafolio profesional de Breiner Stiven Guisao Rodriguez - Tecnólogo en Análisis y Desarrollo de Software y Técnico Laboral en Sistemas">
     <meta name="author" content="Breiner Stiven Guisao Rodriguez">
 
     <title>Breiner Guisao — Desarrollador de Software | Portafolio</title>
 
-    <!-- PENDIENTE: reemplaza SITE_URL por https://portafolio-breiner-guisao.onrender.com
-         (o el dominio que uses). Sin esto, al compartir el enlace por WhatsApp o
-         LinkedIn no aparece vista previa con imagen, solo texto plano. -->
-    <link rel="canonical" href="SITE_URL/">
+    <!-- Si cambias de dominio, actualiza también estas URLs: son las que usan
+         WhatsApp y LinkedIn para la vista previa del enlace. -->
+    <link rel="canonical" href="https://portafolio-breiner-guisao.onrender.com/">
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="Breiner Guisao">
     <meta property="og:title" content="Breiner Guisao — Desarrollador de Software">
     <meta property="og:description"
-        content="Tecnólogo en Análisis y Desarrollo de Software. Desarrollo web con JavaScript, PHP, Laravel y Python, bases de datos SQL y soporte técnico.">
-    <meta property="og:image" content="SITE_URL/images/hero-poster.jpg">
+        content="Tecnólogo en Análisis y Desarrollo de Software. Desarrollo web con Next.js, TypeScript, Laravel y .NET, bases de datos SQL, despliegue en servidores Linux y soporte técnico.">
+    <meta property="og:image" content="https://portafolio-breiner-guisao.onrender.com/images/hero-poster.jpg">
     <meta property="og:locale" content="es_CO">
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="theme-color" content="#0f0f0f">
+    <meta name="theme-color" content="#15171B">
 
     <!-- Datos estructurados: ayuda a Google a entender quién eres -->
     <script type="application/ld+json">
@@ -39,14 +38,17 @@
         "addressCountry": "CO"
       },
       "alumniOf": "SENA",
-      "sameAs": ["https://github.com/Breiner1412"]
+      "url": "https://portafolio-breiner-guisao.onrender.com",
+      "sameAs": ["https://github.com/Breiner1412", "https://www.linkedin.com/in/breiner-stiven-guisao-rodriguez-434578345"]
     }
     </script>
 
-    <!-- Fonts -->
+    <!-- Fonts: Archivo (títulos, ancho expandido) + Public Sans (texto) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@100;200;400;700&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100..125,500..800&family=Public+Sans:ital,wght@0,400;0,600;0,700;1,400&display=swap"
+        rel="stylesheet">
 
     <!-- Bootstrap 5 CSS + Icons -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
@@ -55,30 +57,36 @@
 
     <!-- Custom CSS -->
     <link href="css/style.css" rel="stylesheet">
+    <link href="css/motion.css" rel="stylesheet">
     <link rel="icon" href="images/favicon.png" type="image/png">
 </head>
 
 <body data-theme="dark">
 
     <noscript>
-        <div style="background:#F65129;color:#fff;padding:14px;text-align:center;font-family:sans-serif">
+        <div style="background:#CF430F;color:#fff;padding:14px;text-align:center;font-family:sans-serif">
             Este portafolio necesita JavaScript activado para mostrar el contenido.
             Puedes escribirme a <a href="mailto:rodriguezbreiner125@gmail.com"
                 style="color:#fff;text-decoration:underline">rodriguezbreiner125@gmail.com</a>.
         </div>
     </noscript>
 
+    <a class="skip-link" href="#about">Saltar al contenido</a>
+
     <!-- ========== NAVBAR ========== -->
     <nav class="navbar navbar-expand-lg fixed-top">
+        <!-- Regla de lectura: se llena con el scroll (interactions.js) -->
+        <div class="scroll-ruler" aria-hidden="true"></div>
         <div class="container">
-            <a class="navbar-brand" href="index.html">Breiner Guisao</a>
+            <a class="navbar-brand" href="index.html"><span class="brand-mark" aria-hidden="true">BG</span>Breiner Guisao</a>
 
-            <button class="btn btn-theme-toggle d-lg-none ms-auto me-3" id="themeToggle" aria-label="Cambiar tema">
+            <button class="btn btn-theme-toggle d-lg-none ms-auto me-2" id="themeToggle" aria-label="Cambiar tema">
                 <i class="bi bi-moon-stars-fill"></i>
             </button>
 
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Abrir menú">
+                <i class="bi bi-list"></i>
             </button>
 
             <div class="collapse navbar-collapse" id="navbarNav">
@@ -97,351 +105,313 @@
                     <i class="bi bi-moon-stars-fill"></i>
                 </button>
 
-                <a href="assets/cv.pdf" class="btn custom-btn" download>
-                    <i class="bi bi-download me-2"></i>Descargar CV
+                <a href="assets/cv.pdf" class="btn btn-ghost nav-cv" download aria-label="Descargar CV">
+                    <i class="bi bi-download me-2" aria-hidden="true"></i><span class="nav-cv-text">Descargar CV</span>
                 </a>
             </div>
         </div>
     </nav>
 
-    <!-- ========== HERO ========== -->
-    <section class="hero-section" id="hero">
-        <div class="section-overlay"></div>
-        <div class="video-wrap">
-            <!-- playsinline es obligatorio: sin él, iPhone no reproduce el video dentro
-                 de la página y el hero se ve negro. El poster cubre la carga. -->
-            <video class="custom-video" autoplay loop muted playsinline preload="metadata"
-                poster="images/hero-poster.jpg" aria-hidden="true" tabindex="-1"
-                disablepictureinpicture>
-                <source src="video/hero.mp4" type="video/mp4">
-            </video>
+    <!-- ========== HERO: lámina de plano ========== -->
+    <header class="hero" id="hero">
+        <!-- Mira de CAD que sigue al cursor (solo con mouse; interactions.js) -->
+        <div class="crosshair" aria-hidden="true">
+            <span class="crosshair-x"></span>
+            <span class="crosshair-y"></span>
+            <span class="crosshair-label"></span>
         </div>
 
-        <div class="container d-flex justify-content-center align-items-center">
-            <div class="row">
-                <div class="col-12 text-center">
-                    <small class="hero-subtitle animate-fade-in">Bienvenido a mi portafolio</small>
-                    <h1 class="text-white mb-3 animate-slide-up">Breiner Stiven Guisao Rodriguez</h1>
-                    <h2 class="text-white mb-5 animate-slide-up-delay">
-                        Tecnólogo en Análisis y Desarrollo de Software &amp; Técnico en Mantenimiento de Sistemas
-                    </h2>
-                    <a class="btn custom-btn smoothscroll animate-fade-in-delay" href="#about">Conoce más</a>
-                </div>
-
-                <!-- Social Links — generado por JS para evitar duplicar con el footer -->
-                <div class="col-12 mt-5 text-center">
-                    <div class="social-share animate-fade-in-delay-2" id="heroSocial"></div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- ========== SOBRE MÍ ========== -->
-    <section class="about-section section-padding" id="about">
-        <div class="container">
-            <div class="row align-items-center">
-                <div class="col-lg-6 col-12 mb-4 mb-lg-0">
-                    <div class="about-text-wrap">
-                        <h2 class="mb-4">Sobre Mí</h2>
-                        <p>
-                            Soy Tecnólogo en Análisis y Desarrollo de Software con formación en desarrollo web,
-                            bases de datos y análisis de requisitos. También cuento con formación como Técnico
-                            Laboral en Mantenimiento de Sistemas, con experiencia en ensamble y mantenimiento
-                            de computadores.
-                        </p>
-                        <p>
-                            Poseo experiencia realizando mantenimiento preventivo y correctivo de equipos,
-                            instalación y configuración de hardware, gestión de inventarios tecnológicos y
-                            apoyo en proyectos de renovación tecnológica. Además, trabajé como técnico de
-                            soporte en empresa de telecomunicaciones, donde estuve a cargo de atención y
-                            solución de incidentes técnicos, diagnóstico de fallas, configuración y
-                            actualización de equipos, y verificación del funcionamiento operativo de los
-                            servicios en usuarios finales.
-                        </p>
-                        <p>
-                            Soy una persona proactiva, con alta capacidad de adaptación y aprendizaje continuo.
-                            Me enfoco en la solución eficiente de problemas tecnológicos y en el desarrollo de
-                            habilidades tanto en soporte como en desarrollo de software, buscando crecer
-                            profesionalmente en el área de tecnología.
-                        </p>
-
-                        <!-- Estas cifras deben coincidir con lo que el sitio realmente muestra:
-                             es lo primero que un reclutador cruza. Sube el número cada vez que
-                             publiques un proyecto nuevo en js/portfolio-data.js. -->
-                        <div class="about-stats mt-5">
-                            <div class="row text-center">
-                                <div class="col-4">
-                                    <div class="stat-item">
-                                        <h3 class="stat-number" data-count="3">0</h3>
-                                        <p class="stat-label">Proyectos<br>Publicados</p>
-                                    </div>
-                                </div>
-                                <div class="col-4">
-                                    <div class="stat-item">
-                                        <!-- Escrito a mano: acuérdate de actualizarlo cada año. -->
-                                        <h3 class="stat-number" data-count="2">0</h3>
-                                        <p class="stat-label">Años de<br>Experiencia</p>
-                                    </div>
-                                </div>
-                                <div class="col-4">
-                                    <div class="stat-item">
-                                        <h3 class="stat-number" data-count="3">0</h3>
-                                        <p class="stat-label">Certificados<br>Obtenidos</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+        <div class="container hero-grid">
+            <div class="hero-text">
+                <!-- El bloque se ajusta al ancho del nombre, así la cota de abajo
+                     mide exactamente eso (interactions.js escribe el valor en px). -->
+                <div class="name-block">
+                    <h1 class="hero-name" id="heroName">
+                        <span class="line"><span class="line-inner">Breiner Stiven</span></span>
+                        <span class="line"><span class="line-inner">Guisao Rodriguez</span></span>
+                    </h1>
+                    <div class="dimension" aria-hidden="true">
+                        <span class="dimension-line"></span>
+                        <span class="dimension-value" id="nameWidth">—</span>
                     </div>
                 </div>
 
-                <div class="col-lg-6 col-12">
-                    <div class="about-image-wrap">
-                        <img src="images/perfil.jpg" class="about-image img-fluid" alt="Foto de Breiner Guisao"
-                            loading="lazy" decoding="async" width="800" height="800">
-                        <div class="about-text-info d-flex">
-                            <div class="d-flex">
-                                <i class="about-text-icon bi-code-slash"></i>
-                            </div>
-                            <div class="ms-4">
-                                <h3>Apasionado por la tecnología</h3>
-                                <p class="mb-0">Desarrollo de software y soporte técnico integral</p>
-                            </div>
-                        </div>
+                <p class="hero-role">
+                    Tecnólogo en Análisis y Desarrollo de Software &amp; Técnico Laboral en Sistemas
+                </p>
+
+                <div class="hero-actions">
+                    <a href="#projects" class="btn btn-primary-solid smoothscroll">
+                        <i class="bi bi-arrow-down me-2"></i>Ver proyectos
+                    </a>
+                    <a href="assets/cv.pdf" class="btn btn-ghost" download>
+                        <i class="bi bi-download me-2"></i>Descargar CV
+                    </a>
+                </div>
+
+                <div class="hero-social" id="heroSocial"></div>
+            </div>
+
+            <!-- Foto con cotas y "lente de plano": al pasar el cursor (o tocar en
+                 celular) un círculo muestra la foto en versión plano azul.
+                 Para cambiar la foto basta con reemplazar images/perfil.jpg por otra
+                 imagen cuadrada; el lente usa la misma imagen. -->
+            <figure class="drawing">
+                <div class="drawing-frame" id="photoLens">
+                    <img src="images/perfil.jpg" class="drawing-photo" alt="Foto de Breiner Guisao"
+                        width="800" height="800" decoding="async" fetchpriority="high">
+                    <div class="lens-layer" aria-hidden="true">
+                        <img src="images/perfil.jpg" alt="" width="800" height="800" decoding="async">
+                    </div>
+                    <span class="lens-ring" aria-hidden="true"></span>
+                    <span class="reg reg-tl" aria-hidden="true"></span>
+                    <span class="reg reg-tr" aria-hidden="true"></span>
+                    <span class="reg reg-bl" aria-hidden="true"></span>
+                    <span class="reg reg-br" aria-hidden="true"></span>
+                    <!-- Cota vertical: alto real de la foto en pantalla -->
+                    <div class="dimension dimension--v" aria-hidden="true">
+                        <span class="dimension-line"></span>
+                        <span class="dimension-value" id="photoHeight">—</span>
                     </div>
                 </div>
-            </div>
+                <!-- Cota horizontal: ancho real de la foto en pantalla -->
+                <div class="dimension dimension--photo" aria-hidden="true">
+                    <span class="dimension-line"></span>
+                    <span class="dimension-value" id="photoWidth">—</span>
+                </div>
+                <figcaption class="lens-hint">
+                    <i class="bi bi-search me-2" aria-hidden="true"></i><span class="hint-pointer">Pasa el cursor por la foto</span><span class="hint-touch">Toca la foto</span>
+                </figcaption>
+            </figure>
         </div>
-    </section>
+    </header>
 
-    <!-- ========== EXPERIENCIA ========== -->
-    <section class="experience-section section-padding section-bg" id="experience">
-        <div class="container">
-            <div class="row">
-                <div class="col-12 text-center mb-5">
-                    <h2 class="mb-3">Experiencia Laboral</h2>
+    <main>
+        <!-- ========== SOBRE MÍ ========== -->
+        <section class="section-padding" id="about">
+            <div class="container about-grid">
+                <div class="section-head reveal">
+                    <h2 class="section-title">Sobre Mí</h2>
+                </div>
+
+                <div class="prose reveal" data-stagger>
+                    <p class="lead-text">
+                        Soy Tecnólogo en Análisis y Desarrollo de Software y Técnico Laboral en Sistemas.
+                        Desarrollo aplicaciones web y backend con JavaScript, TypeScript, React, Next.js,
+                        PHP con Laravel, C# con .NET y Python con FastAPI, sobre bases de datos SQL,
+                        Supabase y Firebase, y las despliego en la nube y en mi propio servidor Linux.
+                    </p>
+                    <p>
+                        Poseo experiencia realizando mantenimiento preventivo y correctivo de equipos,
+                        instalación y configuración de hardware, gestión de inventarios tecnológicos y
+                        apoyo en proyectos de renovación tecnológica. Además, trabajé como técnico de
+                        soporte en empresa de telecomunicaciones, donde estuve a cargo de atención y
+                        solución de incidentes técnicos, diagnóstico de fallas, configuración y
+                        actualización de equipos, y verificación del funcionamiento operativo de los
+                        servicios en usuarios finales.
+                    </p>
+                    <p>
+                        Me caracterizo por la capacidad de análisis, la resolución de problemas y la
+                        facilidad para aprender tecnologías nuevas: cada proyecto de este portafolio lo
+                        empecé para aprender algo que no sabía hacer. Busco aportar soluciones eficientes
+                        tanto en desarrollo de software como en soporte e infraestructura.
+                    </p>
+                </div>
+
+                <!-- Cajetín (el recuadro de datos de un plano).
+                     Estas cifras deben coincidir con lo que el sitio realmente muestra:
+                     es lo primero que un reclutador cruza. Sube el número cada vez que
+                     publiques un proyecto nuevo en js/portfolio-data.js. -->
+                <dl class="title-block reveal" data-stagger>
+                    <div class="tb-cell">
+                        <dt>Proyectos desarrollados</dt>
+                        <dd class="stat-number" data-count="7">0</dd>
+                    </div>
+                    <div class="tb-cell">
+                        <dt>Año de experiencia</dt>
+                        <!-- Escrito a mano: TuCable (dic 2025 - jun 2026) + Comfamiliar
+                             (jul 2023 - ene 2024) suman un poco más de un año. -->
+                        <dd class="stat-number" data-count="1">0</dd>
+                    </div>
+                    <div class="tb-cell">
+                        <dt>Certificados obtenidos</dt>
+                        <dd class="stat-number" data-count="3">0</dd>
+                    </div>
+                    <div class="tb-cell tb-wide">
+                        <dt>Enfoque</dt>
+                        <dd class="tb-text">Desarrollo de software y soporte técnico integral</dd>
+                    </div>
+                </dl>
+            </div>
+        </section>
+
+        <!-- ========== EXPERIENCIA ========== -->
+        <section class="section-padding section-alt" id="experience">
+            <div class="container">
+                <div class="section-head reveal">
+                    <h2 class="section-title">Experiencia Laboral</h2>
                     <p class="section-description">Mi trayectoria profesional en el sector tecnológico</p>
                 </div>
+                <ol class="spec-list" id="experienceTimeline"></ol>
             </div>
-            <div class="row">
-                <div class="col-12">
-                    <!-- Generado dinámicamente por JS desde data/portfolio-data.js -->
-                    <div class="education-timeline" id="experienceTimeline"></div>
-                </div>
-            </div>
-        </div>
-    </section>
+        </section>
 
-    <!-- ========== PROYECTOS ========== -->
-    <section class="projects-section section-padding" id="projects">
-        <div class="container">
-            <div class="row">
-                <div class="col-12 text-center mb-5">
-                    <h2 class="mb-3">Mis Proyectos</h2>
+        <!-- ========== PROYECTOS ========== -->
+        <section class="section-padding" id="projects">
+            <div class="container">
+                <div class="section-head reveal">
+                    <h2 class="section-title">Mis Proyectos</h2>
                     <p class="section-description">Una selección de mis trabajos más destacados</p>
                 </div>
-            </div>
 
-            <div class="row" id="projectsGrid"></div>
+                <div class="project-rows" id="projectsGrid"></div>
 
-            <!-- "Hay más proyectos en GitHub" (lo inyecta main.js con tu usuario) -->
-            <div class="row mt-2">
-                <div class="col-lg-10 col-12 mx-auto" id="projectsGithubCta"></div>
-            </div>
+                <!-- Lista de piezas: proyectos sin capturas (main.js, desde otherProjects) -->
+                <div id="otherProjects"></div>
 
-            <!-- Aviso sobre el hosting gratuito de las demos (lo inyecta main.js) -->
-            <div class="row">
-                <div class="col-lg-10 col-12 mx-auto" id="projectsHostingNote"></div>
-            </div>
+                <!-- Notas al pie: GitHub y aviso del hosting (main.js) -->
+                <div class="drawing-notes reveal">
+                    <div id="projectsGithubCta"></div>
+                    <div id="projectsHostingNote"></div>
+                </div>
 
-            <!-- ===== Sobre este sitio =====
-                 Este bloque es texto fijo: edítalo aquí mismo cuando cambies algo
-                 del portafolio. No depende de portfolio-data.js. -->
-            <div class="row mt-5">
-                <div class="col-lg-10 col-12 mx-auto">
-                    <div class="about-site">
-                        <h3 class="about-site-title">
-                            <i class="bi bi-braces me-2"></i>Sobre este sitio
-                        </h3>
+                <!-- ===== Sobre este sitio =====
+                     Texto fijo: edítalo aquí mismo cuando cambies algo del portafolio.
+                     El botón activa el inspector (interactions.js). -->
+                <div class="about-site reveal">
+                    <div class="about-site-head">
+                        <h3 class="subsection-title"><i class="bi bi-braces me-2"></i>Sobre este sitio</h3>
                         <p class="about-site-lead">
                             Este portafolio también es uno de mis proyectos: lo diseñé y lo programé
                             desde cero. Si quieres ver cómo trabajo, ya lo estás viendo.
                         </p>
+                        <button type="button" class="btn btn-blueprint" id="inspectToggle" aria-pressed="false">
+                            <i class="bi bi-bounding-box me-2"></i><span>Inspeccionar esta página</span>
+                        </button>
+                    </div>
 
-                        <div class="row about-site-points">
-                            <div class="col-md-6 col-12">
-                                <div class="about-site-point">
-                                    <i class="bi bi-file-earmark-code"></i>
-                                    <div>
-                                        <strong>Sin frameworks de JavaScript</strong>
-                                        <span>HTML, CSS y JavaScript puro. Bootstrap solo para la grilla
-                                            y los iconos.</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-6 col-12">
-                                <div class="about-site-point">
-                                    <i class="bi bi-database-gear"></i>
-                                    <div>
-                                        <strong>Contenido separado del código</strong>
-                                        <span>Todo el sitio se genera desde un solo archivo de datos:
-                                            publicar un proyecto es llenar un objeto, no tocar el HTML.</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-6 col-12">
-                                <div class="about-site-point">
-                                    <i class="bi bi-phone"></i>
-                                    <div>
-                                        <strong>Responsive y con modo claro/oscuro</strong>
-                                        <span>Se adapta del celular al escritorio y recuerda el tema que
-                                            elige cada visitante.</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-6 col-12">
-                                <div class="about-site-point">
-                                    <i class="bi bi-speedometer2"></i>
-                                    <div>
-                                        <strong>Optimizado para que cargue rápido</strong>
-                                        <span>El video de portada bajó de 18 MB a menos de 1 MB, imágenes
-                                            en carga diferida y un solo manejador de scroll.</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-6 col-12">
-                                <div class="about-site-point">
-                                    <i class="bi bi-universal-access"></i>
-                                    <div>
-                                        <strong>Accesible</strong>
-                                        <span>Navegable con teclado, etiquetas en los formularios y respeta
-                                            a quien prefiere menos animaciones.</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-6 col-12">
-                                <div class="about-site-point">
-                                    <i class="bi bi-envelope-at"></i>
-                                    <div>
-                                        <strong>Formulario de contacto funcional</strong>
-                                        <span>Los mensajes me llegan al correo sin necesidad de un servidor
-                                            propio.</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                    <ul class="about-site-points" data-stagger>
+                        <li><i class="bi bi-file-earmark-code"></i>
+                            <div><strong>Sin frameworks de JavaScript</strong>
+                                <span>HTML, CSS y JavaScript puro. Bootstrap solo para la grilla y los iconos.</span></div></li>
+                        <li><i class="bi bi-database-gear"></i>
+                            <div><strong>Contenido separado del código</strong>
+                                <span>Todo el sitio se genera desde un solo archivo de datos: publicar un proyecto es llenar un objeto, no tocar el HTML.</span></div></li>
+                        <li><i class="bi bi-phone"></i>
+                            <div><strong>Responsive y con modo claro/oscuro</strong>
+                                <span>Se adapta del celular al escritorio y recuerda el tema que elige cada visitante.</span></div></li>
+                        <li><i class="bi bi-speedometer2"></i>
+                            <div><strong>Optimizado para que cargue rápido</strong>
+                                <span>Sin video de portada, imágenes en carga diferida y un solo manejador de scroll.</span></div></li>
+                        <li><i class="bi bi-universal-access"></i>
+                            <div><strong>Accesible</strong>
+                                <span>Navegable con teclado, etiquetas en los formularios y respeta a quien prefiere menos animaciones.</span></div></li>
+                        <li><i class="bi bi-envelope-at"></i>
+                            <div><strong>Formulario de contacto funcional</strong>
+                                <span>Los mensajes me llegan al correo sin necesidad de un servidor propio.</span></div></li>
+                    </ul>
 
-                        <div class="about-site-tags">
-                            <span class="tech-tag">HTML5</span>
-                            <span class="tech-tag">CSS3</span>
-                            <span class="tech-tag">JavaScript</span>
-                            <span class="tech-tag">Bootstrap 5</span>
-                            <span class="tech-tag">EmailJS</span>
-                        </div>
+                    <div class="about-site-tags">
+                        <span class="tech-tag">HTML5</span>
+                        <span class="tech-tag">CSS3</span>
+                        <span class="tech-tag">JavaScript</span>
+                        <span class="tech-tag">Bootstrap 5</span>
+                        <span class="tech-tag">EmailJS</span>
                     </div>
                 </div>
-            </div>
 
-            <!-- GitHub Repos -->
-            <div class="row mt-5">
-                <div class="col-12 text-center">
-                    <h4 class="mb-4">Repositorios de GitHub</h4>
-                    <div id="githubRepos" class="github-repos-grid">
-                        <div class="loading-spinner">
-                            <div class="spinner-border text-primary" role="status">
-                                <span class="visually-hidden">Cargando...</span>
+                <!-- GitHub Repos (github-api.js oculta esta .row si no hay nada que mostrar) -->
+                <div class="row repos-block reveal">
+                    <div class="col-12">
+                        <h3 class="subsection-title">Repositorios de GitHub</h3>
+                        <div id="githubRepos" class="repo-index" data-stagger>
+                            <div class="loading-spinner">
+                                <div class="spinner-border" role="status">
+                                    <span class="visually-hidden">Cargando...</span>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <!-- ========== HABILIDADES ========== -->
-    <section class="skills-section section-padding section-bg" id="skills">
-        <div class="container">
-            <div class="row">
-                <div class="col-12 text-center mb-5">
-                    <h2 class="mb-3">Habilidades</h2>
+        <!-- ========== HABILIDADES ========== -->
+        <section class="section-padding section-alt" id="skills">
+            <div class="container">
+                <div class="section-head reveal">
+                    <h2 class="section-title">Habilidades</h2>
                     <p class="section-description">Conocimientos técnicos y competencias profesionales</p>
                 </div>
+                <!-- Filtro por nivel (interactions.js). Los ítems salen de portfolio-data.js -->
+                <div class="level-filter reveal" role="group" aria-label="Filtrar habilidades por nivel">
+                    <button type="button" class="level-btn is-active" data-level="todos" aria-pressed="true">Todas</button>
+                    <button type="button" class="level-btn" data-level="solido" aria-pressed="false">
+                        <span class="level-bars level-bars--solido" aria-hidden="true"><i></i><i></i><i></i></span>Sólido</button>
+                    <button type="button" class="level-btn" data-level="practica" aria-pressed="false">
+                        <span class="level-bars level-bars--practica" aria-hidden="true"><i></i><i></i><i></i></span>En práctica</button>
+                    <button type="button" class="level-btn" data-level="explorando" aria-pressed="false">
+                        <span class="level-bars level-bars--explorando" aria-hidden="true"><i></i><i></i><i></i></span>Explorando</button>
+                </div>
+                <div id="skillsContainer"></div>
             </div>
-            <!-- Generado dinámicamente por JS desde data/portfolio-data.js -->
-            <div id="skillsContainer"></div>
-        </div>
-    </section>
+        </section>
 
-    <!-- ========== EDUCACIÓN ========== -->
-    <section class="education-section section-padding" id="education">
-        <div class="container">
-            <div class="row">
-                <div class="col-12 text-center mb-5">
-                    <h2 class="mb-3">Educación y Certificaciones</h2>
+        <!-- ========== EDUCACIÓN ========== -->
+        <section class="section-padding" id="education">
+            <div class="container">
+                <div class="section-head reveal">
+                    <h2 class="section-title">Educación y Certificaciones</h2>
                     <p class="section-description">Formación académica y cursos especializados</p>
                 </div>
+
+                <ol class="spec-list spec-list--compact" id="educationTimeline"></ol>
+
+                <h3 class="subsection-title">Cursos y Certificados</h3>
+                <div class="cert-grid reveal" id="certificatesGrid" data-stagger></div>
             </div>
+        </section>
 
-            <div class="row">
-                <div class="col-12">
-                    <div class="education-timeline" id="educationTimeline"></div>
-                </div>
-            </div>
-
-            <!-- Certificates -->
-            <div class="row mt-5">
-                <div class="col-12">
-                    <h4 class="text-center mb-4">Cursos y Certificados</h4>
-                </div>
-                <div id="certificatesGrid" class="row justify-content-center"></div>
-            </div>
-        </div>
-    </section>
-
-    <!-- ========== CONTACTO ========== -->
-    <section class="contact-section section-padding section-bg" id="contact">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-8 col-12 mx-auto">
-                    <h2 class="text-center mb-4">¿Hablamos?</h2>
-                    <p class="text-center mb-5">¿Tienes un proyecto en mente o quieres trabajar juntos? ¡Contáctame!</p>
-
-                    <div class="contact-form-wrap">
-                        <form class="custom-form contact-form" novalidate>
-                            <div class="row">
-                                <div class="col-lg-6 col-12 mb-4">
-                                    <label for="name" class="visually-hidden">Tu nombre</label>
-                                    <input type="text" name="name" id="name" class="form-control"
-                                        placeholder="Tu nombre" autocomplete="name" required>
-                                </div>
-                                <div class="col-lg-6 col-12 mb-4">
-                                    <label for="email" class="visually-hidden">Tu correo electrónico</label>
-                                    <input type="email" name="email" id="email" class="form-control"
-                                        placeholder="Tu correo electrónico" autocomplete="email" required>
-                                </div>
-                                <div class="col-12 mb-4">
-                                    <label for="subject" class="visually-hidden">Asunto</label>
-                                    <input type="text" name="subject" id="subject" class="form-control"
-                                        placeholder="Asunto">
-                                </div>
-                                <div class="col-12 mb-4">
-                                    <label for="message" class="visually-hidden">Tu mensaje</label>
-                                    <textarea name="message" rows="5" class="form-control" id="message"
-                                        placeholder="Tu mensaje" required></textarea>
-                                </div>
-                                <div class="col-12 text-center">
-                                    <button type="submit" class="btn custom-btn">
-                                        <i class="bi bi-send me-2"></i>Enviar Mensaje
-                                    </button>
-                                </div>
-                            </div>
-                        </form>
+        <!-- ========== CONTACTO ========== -->
+        <section class="contact-section" id="contact">
+            <div class="container">
+                <div class="contact-sheet reveal">
+                    <div class="contact-intro">
+                        <h2 class="section-title">¿Hablamos?</h2>
+                        <p>¿Tienes un proyecto en mente o quieres trabajar juntos? ¡Contáctame!</p>
+                        <div id="contactInfo"></div>
                     </div>
 
-                    <div class="contact-info mt-5" id="contactInfo"></div>
+                    <form class="custom-form contact-form" novalidate>
+                        <div class="form-grid" data-stagger>
+                            <div class="field">
+                                <label for="name">Tu nombre</label>
+                                <input type="text" name="name" id="name" class="form-control"
+                                    autocomplete="name" required>
+                            </div>
+                            <div class="field">
+                                <label for="email">Tu correo electrónico</label>
+                                <input type="email" name="email" id="email" class="form-control"
+                                    autocomplete="email" required>
+                            </div>
+                            <div class="field field-full">
+                                <label for="subject">Asunto <span class="field-optional">(opcional)</span></label>
+                                <input type="text" name="subject" id="subject" class="form-control">
+                            </div>
+                            <div class="field field-full">
+                                <label for="message">Tu mensaje</label>
+                                <textarea name="message" rows="5" class="form-control" id="message"
+                                    required></textarea>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary-solid">
+                            <i class="bi bi-send me-2"></i>Enviar Mensaje
+                        </button>
+                    </form>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
+    </main>
 
     <!-- ========== FOOTER ========== -->
     <footer class="site-footer" id="siteFooter"></footer>
@@ -450,6 +420,9 @@
     <button id="scrollTopBtn" class="scroll-top-btn" aria-label="Volver arriba">
         <i class="bi bi-arrow-up"></i>
     </button>
+
+    <!-- Aviso accesible para "copiado", "modo plano activado", etc. -->
+    <div class="live-toast" id="liveToast" role="status" aria-live="polite"></div>
 
     <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 
@@ -460,6 +433,7 @@
     <script src="js/portfolio-data.js"></script>
     <script src="js/github-api.js"></script>
     <script src="js/main.js"></script>
+    <script src="js/interactions.js"></script>
 </body>
 
 </html>

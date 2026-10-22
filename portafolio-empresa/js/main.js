@@ -61,10 +61,16 @@
         setTheme(saved);
         themeToggles.forEach(btn => btn.addEventListener('click', toggleTheme));
     }
+    // Fundido entre temas donde el navegador lo soporta; si no, cambio directo.
     function toggleTheme() {
         const next = body.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
-        setTheme(next);
-        localStorage.setItem('theme', next);
+        const apply = () => {
+            setTheme(next);
+            localStorage.setItem('theme', next);
+        };
+        const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        if (document.startViewTransition && !reduced) document.startViewTransition(apply);
+        else apply();
     }
     function setTheme(theme) {
         body.setAttribute('data-theme', theme);
@@ -78,8 +84,15 @@
     // ========== NAVBAR SCROLL ==========
     function initNavbarScroll() {
         if (!navbar) return;
+        const main = document.querySelector('.circuit-main');
         onScroll(() => {
             navbar.classList.toggle('navbar-scrolled', window.scrollY > 100);
+            // Riel de circuito: 0 al empezar <main>, 1 al llegar al final.
+            if (main) {
+                const start = main.offsetTop - window.innerHeight * 0.5;
+                const progress = (window.scrollY - start) / main.offsetHeight;
+                main.style.setProperty('--rail', Math.min(Math.max(progress, 0), 1).toFixed(4));
+            }
         });
     }
 
@@ -103,7 +116,8 @@
                 e.preventDefault();
                 const target = document.querySelector(href);
                 if (!target) return;
-                window.scrollTo({ top: target.offsetTop - 80, behavior: 'smooth' });
+                // getBoundingClientRect: offsetTop sería relativo a <main> (position: relative).
+                window.scrollTo({ top: target.getBoundingClientRect().top + window.scrollY - 80, behavior: 'smooth' });
                 const collapse = document.querySelector('.navbar-collapse.show');
                 if (collapse) collapse.classList.remove('show');
             });
@@ -112,13 +126,15 @@
 
     // ========== ACTIVE NAV ==========
     function initActiveNav() {
-        const sections = document.querySelectorAll('section[id]');
+        const sections = document.querySelectorAll('section[id], header[id]');
         const navLinks = document.querySelectorAll('.nav-link');
         onScroll(() => {
             let current = '';
+            // Posición real en la página: offsetTop sería relativo a <main>, que tiene
+            // position: relative por el riel de circuito.
             sections.forEach(sec => {
-                if (window.scrollY >= sec.offsetTop - 100 &&
-                    window.scrollY < sec.offsetTop + sec.clientHeight) {
+                const top = sec.getBoundingClientRect().top + window.scrollY;
+                if (window.scrollY >= top - 100 && window.scrollY < top + sec.clientHeight) {
                     current = sec.id;
                 }
             });
@@ -159,13 +175,6 @@
                 if (p < 1) requestAnimationFrame(paso);
             };
             requestAnimationFrame(paso);
-        });
-    }
-
-    // ========== SKILL BARS ==========
-    function initSkillBars() {
-        observe('.skill-progress .progress-bar', bar => {
-            setTimeout(() => { bar.style.width = bar.dataset.width; }, 100);
         });
     }
 
@@ -262,48 +271,56 @@
 
     // ========== RENDERERS ==========
 
-    function renderSocialIcons(linksArr, withLabel = false, labelText = 'Síguenos:') {
+    // Nivel de habilidad -> clave corta (CSS) y cuántos de los 3 "LEDs" se encienden.
+    const LEVELS = {
+        'Sólido': { slug: 'solido', on: 3 },
+        'En práctica': { slug: 'practica', on: 2 },
+        'Explorando': { slug: 'explorando', on: 1 },
+    };
+    const leds = (on) => `<span class="leds" aria-hidden="true">${[1, 2, 3]
+        .map((n) => `<i class="${n <= on ? 'on' : ''}"></i>`).join('')}</span>`;
+
+    function renderSocialIcons(linksArr) {
         const items = renderList(linksArr, s => `
-      <li class="social-icon-item">
+      <li>
         <a href="${s.url}" ${s.url.startsWith('mailto') ? '' : 'target="_blank" rel="noopener noreferrer"'}
-           class="social-icon-link" aria-label="${s.label}">
-          <span class="${s.icon}"></span>
+           class="social-icon-link" aria-label="${s.label}" title="${s.label}">
+          <i class="bi ${s.icon}" aria-hidden="true"></i>
         </a>
       </li>`);
-        return `<ul class="social-icon d-flex align-items-center justify-content-center">
-      ${withLabel ? `<span class="text-white me-3">${labelText}</span>` : ''}${items}</ul>`;
+        return `<ul class="social-icon">${items}</ul>`;
     }
 
+    // Cifras como nodos de circuito unidos por una pista.
     function renderAboutStats() {
         const container = $('aboutStats');
         if (!container) return;
         container.innerHTML = renderList(aboutStats, s => `
-      <div class="col-4">
-        <div class="stat-item">
-          <h3 class="stat-number" data-count="${s.count}">0</h3>
-          <p class="stat-label">${s.label}</p>
-        </div>
-      </div>`);
+      <li class="stat-node">
+        <span class="stat-number" data-count="${s.count}">0</span>
+        <span class="stat-label">${s.label}</span>
+      </li>`);
     }
 
+    // Servicios principales: tablero 2×2 de "nodos"; cada tarjeta tiene su punto de
+    // conexión en la esquina, que se enciende al pasar el cursor.
     function renderServices() {
         const container = $('servicesGrid');
         if (container) {
             container.innerHTML = renderList(services, s => `
-      <div class="col-lg-6 col-12 mb-4">
-        <div class="service-card">
-          <div class="service-icon"><i class="bi ${esc(s.icon)}"></i></div>
-          <h4 class="service-title">${esc(s.title)}</h4>
-          <p class="service-description">${s.description}</p>
-          <div class="service-tags">
-            ${renderList(s.tags || [], t => `<span class="tech-tag">${esc(t)}</span>`)}
-          </div>
+      <article class="service-node reveal">
+        <span class="service-pin" aria-hidden="true"></span>
+        <div class="service-icon"><i class="bi ${esc(s.icon)}" aria-hidden="true"></i></div>
+        <h3 class="service-title">${esc(s.title)}</h3>
+        <p class="service-description">${s.description}</p>
+        <div class="service-tags">
+          ${renderList(s.tags || [], t => `<span class="tech-tag">${esc(t)}</span>`)}
         </div>
-      </div>`);
+      </article>`);
         }
 
-        // Servicios complementarios: se muestran en una fila secundaria y compacta,
-        // para que no compitan visualmente con la oferta principal de software.
+        // Servicios complementarios: fila secundaria y compacta, para que no compitan
+        // visualmente con la oferta principal de software.
         const secondary = $('secondaryServicesGrid');
         const secondaryBlock = $('secondaryServices');
         const list = PORTFOLIO.secondaryServices || [];
@@ -313,98 +330,91 @@
             return;
         }
         secondary.innerHTML = renderList(list, s => `
-      <div class="col-lg-4 col-md-6 col-12 mb-4">
-        <div class="service-card service-card--compact">
-          <div class="service-icon service-icon--sm"><i class="bi ${esc(s.icon)}"></i></div>
-          <h5 class="service-title">${esc(s.title)}</h5>
-          <p class="service-description">${s.description}</p>
+      <li>
+        <i class="bi ${esc(s.icon)}" aria-hidden="true"></i>
+        <div>
+          <h4 class="secondary-title">${esc(s.title)}</h4>
+          <p>${s.description}</p>
         </div>
-      </div>`);
+      </li>`);
     }
 
+    // Equipo: perfil compacto; la trayectoria (experiencia y educación) se despliega
+    // con "Ver trayectoria" (interactions.js), para no mostrar dos hojas de vida enteras.
     function renderTeam() {
         const container = $('teamGrid');
         if (!container) return;
-        container.innerHTML = renderList(team, m => `
-      <div class="col-lg-6 col-12 mb-5">
-        <div class="team-card">
-          <div class="team-card-header">
-            <div class="team-avatar-wrap">
-              <img src="${m.photo}" class="team-avatar" alt="${m.name}">
-            </div>
+        container.innerHTML = renderList(team, (m, i) => `
+      <article class="team-card reveal">
+        <header class="team-head">
+          <div class="team-avatar-wrap"><img src="${m.photo}" class="team-avatar" alt="${m.name}" loading="lazy" decoding="async"></div>
+          <div>
             <h3 class="team-name">${m.name}</h3>
             <p class="team-role">${m.role}</p>
             <div class="team-social">
               ${renderList(m.social, s => `
-                <a href="${s.url}" ${s.url.startsWith('mailto') ? '' : 'target="_blank" rel="noopener noreferrer"'} aria-label="${s.label}">
-                  <i class="bi ${s.icon}"></i>
+                <a href="${s.url}" ${s.url.startsWith('mailto') ? '' : 'target="_blank" rel="noopener noreferrer"'} aria-label="${s.label}" title="${s.label}">
+                  <i class="bi ${s.icon}" aria-hidden="true"></i>
                 </a>`)}
             </div>
           </div>
-          <div class="team-card-body">
-            <h5 class="team-section-subtitle"><i class="bi bi-person-badge me-2"></i>Perfil</h5>
-            <p>${m.profile}</p>
+        </header>
+        <p class="team-profile">${m.profile}</p>
+        ${m.focus?.length ? `<div class="team-focus">
+          ${renderList(m.focus, f => `<span class="tech-tag">${esc(f)}</span>`)}
+        </div>` : ''}
 
-            ${m.focus?.length ? `<div class="team-focus mb-4">
-              ${renderList(m.focus, f => `<span class="tech-tag">${esc(f)}</span>`)}
-            </div>` : ''}
-
-            <h5 class="team-section-subtitle"><i class="bi bi-briefcase me-2"></i>Experiencia relevante</h5>
-            <div class="team-experience">
-              ${renderList(m.experience, exp => `
-                <div class="experience-item">
-                  <span class="experience-date">${exp.date}</span>
-                  <strong>${exp.title}</strong>
-                  <p>${exp.desc}</p>
-                </div>`)}
-            </div>
-
-            <h5 class="team-section-subtitle"><i class="bi bi-mortarboard me-2"></i>Educación</h5>
-            <div class="team-education">
-              ${renderList(m.education, ed => `
-                <div class="education-item">
-                  <strong>${ed.title}</strong>
-                  <span>${ed.institution}</span>
-                </div>`)}
-            </div>
-
-            <div class="team-portfolio-link mt-4">
-              <a href="${m.portfolioUrl}" target="_blank" rel="noopener noreferrer" class="btn custom-btn w-100">
-                <i class="bi bi-box-arrow-up-right me-2"></i>Ver Portafolio Personal
-              </a>
-            </div>
-          </div>
+        <button type="button" class="trail-toggle" aria-expanded="false" aria-controls="trail-${i}">
+          <i class="bi bi-diagram-3 me-2" aria-hidden="true"></i><span>Ver trayectoria</span>
+          <i class="bi bi-chevron-down trail-chevron" aria-hidden="true"></i>
+        </button>
+        <div class="trail" id="trail-${i}" hidden>
+          <h4 class="trail-title"><i class="bi bi-briefcase me-2" aria-hidden="true"></i>Experiencia relevante</h4>
+          <ul class="trail-list">
+            ${renderList(m.experience, exp => `
+              <li>
+                <span class="trail-date">${exp.date}</span>
+                <strong>${exp.title}</strong>
+                <p>${exp.desc}</p>
+              </li>`)}
+          </ul>
+          <h4 class="trail-title"><i class="bi bi-mortarboard me-2" aria-hidden="true"></i>Educación</h4>
+          <ul class="trail-list">
+            ${renderList(m.education, ed => `
+              <li>
+                <strong>${ed.title}</strong>
+                <span class="trail-date">${ed.institution}</span>
+              </li>`)}
+          </ul>
         </div>
-      </div>`);
+
+        <a href="${m.portfolioUrl}" target="_blank" rel="noopener noreferrer" class="btn btn-ghost team-portfolio">
+          <i class="bi bi-box-arrow-up-right me-2"></i>Ver Portafolio Personal
+        </a>
+      </article>`);
     }
 
+    // Stack: dos columnas de filas; el nivel se muestra con 3 "LEDs" y en texto.
     function renderSkills() {
         const container = $('skillsContainer');
         if (!container) return;
         container.innerHTML = renderList(skills, cat => `
-      <div class="skill-category mb-5">
-        <h3 class="skill-category-title mb-4">
-          <i class="bi ${cat.icon} me-2"></i> ${cat.category}
-        </h3>
-        <div class="row">
+      <section class="stack-group reveal">
+        <h3 class="stack-title"><i class="bi ${cat.icon}" aria-hidden="true"></i>${cat.category}</h3>
+        <ul class="stack-list" data-stagger>
           ${renderList(cat.items, s => {
             const nivel = s.level || 'En práctica';
-            const slug = { 'Sólido': 'solido', 'En práctica': 'practica', 'Explorando': 'explorando' }[nivel] || 'practica';
+            const lv = LEVELS[nivel] || LEVELS['En práctica'];
             return `
-            <div class="col-lg-4 col-md-6 col-12 mb-4">
-              <div class="skill-item skill-item--level">
-                <div class="skill-header">
-                  <div class="skill-icon-name">
-                    <i class="bi ${esc(s.icon)} skill-icon-bootstrap"></i>
-                    <h5 class="skill-name">${esc(s.name)}</h5>
-                  </div>
-                  <span class="skill-level skill-level--${slug}">${esc(nivel)}</span>
-                </div>
-              </div>
-            </div>`;
+            <li class="stack-row" data-level="${lv.slug}">
+              <i class="bi ${esc(s.icon)} stack-icon" aria-hidden="true"></i>
+              <span class="stack-name">${esc(s.name)}</span>
+              ${leds(lv.on)}
+              <span class="stack-level">${esc(nivel)}</span>
+            </li>`;
           })}
-        </div>
-      </div>`);
+        </ul>
+      </section>`);
     }
 
     function renderProjectCards() {
@@ -415,19 +425,23 @@
         const visibles = (projectCards || []).filter(id => projects[id]);
 
         // Estado vacío: es preferible decir "aún no hay casos publicados" que mostrar
-        // proyectos de relleno con enlaces que no llevan a ninguna parte.
+        // proyectos de relleno con enlaces que no llevan a ninguna parte. Se dibuja como
+        // un conector abierto esperando su primer proyecto.
         if (!visibles.length) {
             grid.innerHTML = `
-        <div class="col-lg-8 col-12 mx-auto">
-          <div class="empty-state text-center">
-            <i class="bi bi-rocket-takeoff empty-state-icon"></i>
-            <h4 class="empty-state-title">Estamos preparando nuestros primeros casos</h4>
-            <p class="empty-state-text">
-              Aquí publicaremos los proyectos con capturas, stack y resultados.
-              Si quieres ser uno de los primeros, cuéntanos tu idea y armamos una propuesta sin costo.
-            </p>
-            <div class="empty-state-actions">
-              <a href="#contact" class="btn custom-btn smoothscroll">
+        <div class="col-12">
+          <div class="empty-node reveal">
+            <div class="empty-socket" aria-hidden="true">
+              <span class="socket-line"></span>
+              <span class="socket-ring"><i class="bi bi-plus-lg"></i></span>
+            </div>
+            <div class="empty-copy">
+              <h3 class="empty-state-title">Estamos preparando nuestros primeros casos</h3>
+              <p class="empty-state-text">
+                Aquí publicaremos los proyectos con capturas, stack y resultados.
+                Si quieres ser uno de los primeros, cuéntanos tu idea y armamos una propuesta sin costo.
+              </p>
+              <a href="#contact" class="btn btn-primary-solid smoothscroll">
                 <i class="bi bi-chat-dots me-2"></i>Cuéntanos tu proyecto
               </a>
             </div>
@@ -439,25 +453,19 @@
         grid.innerHTML = renderList(visibles, id => {
             const p = projects[id];
             return `
-        <div class="col-lg-4 col-md-6 col-12 mb-4 project-item" data-category="${esc(p.category || 'web')}">
-          <div class="project-card">
-            <div class="project-image-wrap">
-              <img src="${esc(p.mainImage)}" class="project-image img-fluid" alt="${esc(p.title)}"
-                   loading="lazy" decoding="async">
-              <div class="project-overlay">
-                <a href="project-detail.html?id=${encodeURIComponent(id)}" class="btn btn-project-detail">
-                  Ver Detalles <i class="bi bi-arrow-right ms-2"></i>
-                </a>
-              </div>
-            </div>
-            <div class="project-info">
-              <h4 class="project-title">${esc(p.title)}</h4>
-              <p class="project-brief">${p.brief}</p>
-              <div class="project-tech-tags">
+        <div class="col-lg-4 col-md-6 col-12 mb-4 project-item reveal" data-category="${esc(p.category || 'web')}">
+          <a class="project-card" href="project-detail.html?id=${encodeURIComponent(id)}">
+            <span class="project-image-wrap">
+              <img src="${esc(p.mainImage)}" class="project-image" alt="${esc(p.title)}" loading="lazy" decoding="async">
+            </span>
+            <span class="project-info">
+              <span class="project-title">${esc(p.title)}</span>
+              <span class="project-brief">${p.brief}</span>
+              <span class="project-tech-tags">
                 ${renderList(p.tags || p.tech || [], t => `<span class="tech-tag">${esc(t)}</span>`)}
-              </div>
-            </div>
-          </div>
+              </span>
+            </span>
+          </a>
         </div>`;
         });
     }
@@ -466,45 +474,35 @@
         const container = $('contactInfoGrid');
         if (!container) return;
         container.innerHTML = renderList(contactInfo, item => `
-      <div class="col-lg-4 col-12 mb-4">
-        <div class="contact-info-item">
-          <i class="bi ${item.icon}"></i>
-          <h5>${item.title}</h5>
+      <li>
+        <i class="bi ${item.icon}" aria-hidden="true"></i>
+        <div>
+          <span class="contact-label">${item.title}</span>
           ${renderList(item.lines, line =>
             line.url
-                ? `<a href="${line.url}" ${line.url.startsWith('mailto') ? '' : 'target="_blank" rel="noopener noreferrer"'}>${line.text}</a><br>`
-                : `<p>${line.text}</p>`
+                ? `<a href="${line.url}" ${line.url.startsWith('mailto') ? '' : 'target="_blank" rel="noopener noreferrer"'}>${line.text}</a>`
+                : `<span class="contact-text">${line.text}</span>`
         )}
         </div>
-      </div>`);
+      </li>`);
     }
 
     function renderFooter() {
         const footer = $('siteFooter');
         if (!footer) return;
         footer.innerHTML = `
-      <div class="container">
-        <div class="row align-items-center">
-          <div class="col-lg-6 col-12 text-center text-lg-start mb-4 mb-lg-0">
-            <div class="d-flex align-items-center justify-content-center justify-content-lg-start">
-              <img src="${company.logo}" alt="${company.name}" style="width:40px;margin-right:12px;">
-              <div>
-                <h4 class="text-white mb-1">${company.brandHTML}</h4>
-                <p class="text-white-50 mb-0" style="font-size:0.85rem">${company.tagline}</p>
-              </div>
-            </div>
-          </div>
-          <div class="col-lg-6 col-12 d-flex justify-content-center justify-content-lg-end align-items-center">
-            ${renderSocialIcons(socialLinks)}
+      <div class="container footer-row">
+        <div class="footer-brand">
+          <img src="${company.logo}" alt="" width="40" height="40">
+          <div>
+            <p class="footer-name">${company.brandHTML}</p>
+            <p class="footer-meta">${company.tagline}</p>
           </div>
         </div>
-        <div class="row mt-4">
-          <div class="col-12 text-center">
-            <p class="copyright-text text-white-50">
-              © ${new Date().getFullYear()} ${company.name}. Todos los derechos reservados. | Breiner Guisao & Luisa Sánchez
-            </p>
-          </div>
-        </div>
+        ${renderSocialIcons(socialLinks)}
+        <p class="footer-meta footer-copy">
+          © ${new Date().getFullYear()} ${company.name}. Todos los derechos reservados. | Breiner Guisao & Luisa Sánchez
+        </p>
       </div>`;
     }
 
@@ -514,15 +512,16 @@
         if (!nav) return;
         nav.innerHTML = `
       <div class="container">
-        <a class="navbar-brand d-flex align-items-center" href="index.html">
-          <img src="${company.logo}" alt="${company.name}" class="navbar-logo me-2">
+        <a class="navbar-brand" href="index.html">
+          <img src="${company.logo}" alt="" class="navbar-logo" width="40" height="40">
           <span>${company.brandHTML}</span>
         </a>
         <button class="btn btn-theme-toggle d-lg-none ms-auto me-3" id="themeToggle" aria-label="Cambiar tema">
           <i class="bi bi-sun-fill"></i>
         </button>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-          <span class="navbar-toggler-icon"></span>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Abrir menú">
+          <i class="bi bi-list"></i>
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
           <ul class="navbar-nav align-items-lg-center ms-auto me-lg-3">
@@ -533,7 +532,7 @@
           <button class="btn btn-theme-toggle d-none d-lg-block me-3" id="themeToggleDesktop" aria-label="Cambiar tema">
             <i class="bi bi-sun-fill"></i>
           </button>
-          <a href="index.html#projects" class="btn custom-btn d-lg-block d-none">
+          <a href="index.html#projects" class="btn btn-ghost nav-cta">
             <i class="bi bi-arrow-left me-2"></i>Volver
           </a>
         </div>
@@ -556,7 +555,12 @@
 
         if (!p) {
             fill('projectTitle', 'Proyecto no encontrado');
-            fill('projectSubtitle', 'ID incorrecto');
+            fill('projectSubtitle', 'Este enlace no corresponde a ningún proyecto publicado.');
+            fill('projectLinksButtons', `<a href="index.html#projects" class="btn btn-primary-solid">
+              <i class="bi bi-arrow-left me-2"></i>Ver los proyectos</a>`);
+            // Sin proyecto no hay nada que mostrar debajo: se ocultan las secciones vacías.
+            document.querySelectorAll('.project-gallery-section, .project-details-section, .project-team-section, .related-projects-section')
+                .forEach((sec) => { sec.hidden = true; });
             return;
         }
 
@@ -573,8 +577,8 @@
 
         let btns = '';
         // Solo se pinta el botón si el enlace es real; un '#' generaba un botón muerto.
-        if (isExternal(p.github)) btns += `<a href="${esc(p.github)}" target="_blank" rel="noopener noreferrer" class="btn custom-btn me-2"><i class="bi bi-github me-2"></i>Ver Código</a>`;
-        if (isExternal(p.demo)) btns += `<a href="${esc(p.demo)}" target="_blank" rel="noopener noreferrer" class="btn btn-outline-hero"><i class="bi bi-box-arrow-up-right me-2"></i>Demo en Vivo</a>`;
+        if (isExternal(p.github)) btns += `<a href="${esc(p.github)}" target="_blank" rel="noopener noreferrer" class="btn btn-primary-solid me-2"><i class="bi bi-github me-2"></i>Ver Código</a>`;
+        if (isExternal(p.demo)) btns += `<a href="${esc(p.demo)}" target="_blank" rel="noopener noreferrer" class="btn btn-ghost"><i class="bi bi-box-arrow-up-right me-2"></i>Demo en Vivo</a>`;
         fill('projectLinksButtons', btns);
 
         if (p.demoAccess?.length) {
@@ -612,7 +616,7 @@
         if (p.extraLinks?.length) {
             if (extraBox) extraBox.classList.remove('d-none');
             fill('projectExtraLinks', renderList(p.extraLinks, l =>
-                `<a href="${l.url}" target="_blank" rel="noopener noreferrer" class="btn btn-outline-primary"><i class="${l.icon} me-2"></i>${l.label}</a>`));
+                `<a href="${l.url}" target="_blank" rel="noopener noreferrer" class="btn btn-ghost"><i class="${l.icon} me-2"></i>${l.label}</a>`));
         }
 
         const pTeam = p.team || [];
@@ -677,7 +681,7 @@
 
     // ========== INIT ==========
     function initAll() {
-        fill('heroSocial', renderSocialIcons(socialLinks, true, 'Síguenos:'));
+        fill('heroSocial', renderSocialIcons(socialLinks));
         renderAboutStats();
         renderServices();
         renderTeam();
@@ -692,12 +696,10 @@
         initSmoothScroll();
         initActiveNav();
         initStatsCounter();
-        initSkillBars();
         initContactForm();
         initTooltips();
         initProjectDetail();
 
-        console.log('🚀 INSATECH NEO initialized');
     }
 
     if (document.readyState === 'loading') {

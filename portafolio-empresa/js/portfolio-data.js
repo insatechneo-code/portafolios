@@ -111,18 +111,19 @@ const PORTFOLIO = {
             photo: 'images/breiner.jpg',
             social: [
                 { url: 'https://github.com/Breiner1412', icon: 'bi-github', label: 'GitHub de Breiner' },
+                { url: 'https://www.linkedin.com/in/breiner-stiven-guisao-rodriguez-434578345', icon: 'bi-linkedin', label: 'LinkedIn de Breiner' },
                 { url: 'mailto:rodriguezbreiner125@gmail.com', icon: 'bi-envelope', label: 'Email de Breiner' },
                 { url: 'https://wa.me/573206554202?text=%C2%A1Hola!%20Vi%20el%20portafolio%20de%20INSATECH%20NEO%20y%20me%20gustar%C3%ADa%20conocer%20m%C3%A1s%20sobre%20sus%20servicios.', icon: 'bi-whatsapp', label: 'WhatsApp de Breiner' },
             ],
-            profile: 'Tecnólogo en Análisis y Desarrollo de Software (SENA). Desarrolla el frontend y el backend de los proyectos: JavaScript, PHP con Laravel, Python con FastAPI, bases de datos SQL y despliegue con Git. Su base como técnico en mantenimiento de sistemas le da criterio para resolver también la parte de infraestructura.',
-            focus: ['Full Stack', 'Laravel', 'JavaScript', 'Bases de datos', 'Despliegue'],
+            profile: 'Tecnólogo en Análisis y Desarrollo de Software (SENA) y Técnico Laboral en Sistemas. Desarrolla el frontend y el backend de los proyectos: Next.js y TypeScript, PHP con Laravel, C# con .NET, bases de datos SQL y Supabase, y el despliegue en la nube y en servidores Linux. Su base en soporte y mantenimiento de equipos le da criterio para resolver también la parte de infraestructura.',
+            focus: ['Full Stack', 'Next.js', 'Laravel', '.NET', 'Bases de datos', 'Servidores Linux'],
             experience: [
                 { date: 'Dic 2025 - Jun 2026', title: 'Técnico de Soporte — TuCable SAS', desc: 'Diagnóstico y resolución de incidentes en servicios de internet y TV, configuración de equipos de red y validación del servicio en usuario final.' },
                 { date: 'Jul 2023 - Ene 2024', title: 'Auxiliar de Soporte Técnico — Comfamiliar Risaralda', desc: 'Mantenimiento preventivo y correctivo, ensamblaje de hardware y gestión de inventarios tecnológicos.' },
             ],
             education: [
                 { title: 'Tecnólogo en Análisis y Desarrollo de Software', institution: 'SENA — 2024 - 2026' },
-                { title: 'Técnico Laboral en Mantenimiento de Sistemas', institution: 'Instituto Comfamiliar Risaralda — 2022 - 2024' },
+                { title: 'Técnico Laboral en Sistemas', institution: 'Instituto Comfamiliar Risaralda — 2022 - 2024' },
             ],
             portfolioUrl: 'https://portafolio-breiner-guisao.onrender.com',
         },
